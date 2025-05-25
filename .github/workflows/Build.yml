@@ -1,14 +1,9 @@
-name: .NET Framework Desktop
+name: Project Building
 permissions: 
   contents: read
 on:
   push:
     paths:
-      - "cat2/**"
-      - ".github/workflows/Build.yml"
-  pull_request:
-    paths:
-      
       - "cat2/**"
       - ".github/workflows/Build.yml"
   workflow_dispatch:

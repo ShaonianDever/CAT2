@@ -27,14 +27,16 @@ public partial class MainWindow
 
         GlobalSnackbar = new Snackbar(new SnackbarPresenter())
         {
-            VerticalAlignment = VerticalAlignment.Bottom,
+            Margin = new Thickness(45, 0, 20, 40),
             HorizontalAlignment = HorizontalAlignment.Stretch,
-            Margin = new Thickness(60, 0, 20, 40),
-            Timeout = TimeSpan.FromMilliseconds(2000)
+            VerticalAlignment = VerticalAlignment.Bottom,
+            Timeout = TimeSpan.FromMilliseconds(2000),
+            IsCloseButtonEnabled = false
         };
         MainGrid.Children.Add(GlobalSnackbar);
 
         await Sign.Signin();
+        Topmost = false;
         if (Sign.IsSignin)
         {
             UserItem.Visibility = Visibility.Visible;
