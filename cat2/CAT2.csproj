@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+    <PropertyGroup>
+        <UseWPF>true</UseWPF>
+        <OutputType>WinExe</OutputType>
+        <LangVersion>Latest</LangVersion>
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <TargetFramework>net48</TargetFramework>
+        <ApplicationIcon>logo.ico</ApplicationIcon>
+        <AssemblyName>ChmlFrp - Advanced Toolkit 2</AssemblyName>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Resource Include="logo.ico"/>
+        <PackageReference Include="WPF-UI" Version="4.0.2"/>
+        <PackageReference Include="ChmlFrp.SDK" Version="0.0.7"/>
+        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0"/>
+        <PackageReference Include="Costura.Fody" PrivateAssets="All" Version="6.0.0"/>
+    </ItemGroup>
+
+</Project>

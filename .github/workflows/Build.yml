@@ -1,0 +1,60 @@
+name: .NET Framework Desktop
+permissions: 
+  contents: read
+on:
+  push:
+    paths:
+      - "cat2/**"
+      - ".github/workflows/Build.yml"
+  pull_request:
+    paths:
+      
+      - "cat2/**"
+      - ".github/workflows/Build.yml"
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        configuration: [Release]
+    runs-on: windows-latest
+    env:
+      Project_File_Name: "CAT2" # The name of the project file without the extension
+      # This is the name of the project file, e.g., "CAT2.csproj"
+      Project_Folder_Name: "cat2" # The folder name where the project file is located
+      # This is the folder name where the project file is located, e.g., "cat2"
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@main
+      with:
+        sparse-checkout: 
+          ${{ env.Project_Folder_Name }}/
+          
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@main
+
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@main
+
+    - name: Cache NuGet packages
+      uses: actions/cache@main
+      with:
+        path: ~/.nuget/packages
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+        restore-keys: |
+          ${{ runner.os }}-nuget-
+
+    - name: Restore NuGet packages
+      run: nuget restore ${{ env.Project_Folder_Name }}/${{ env.Project_File_Name }}.csproj
+
+    - name: Build the project
+      run: msbuild ${{ env.Project_Folder_Name }}/${{ env.Project_File_Name }}.csproj /p:Configuration=${{ matrix.configuration }} /p:OutDir=public\
+
+    - name: Upload a Build Artifact to GitHub
+      uses: actions/upload-artifact@main
+      with:
+        name: ${{ matrix.configuration }}
+        path: ${{ env.Project_Folder_Name }}/public/
+
