@@ -34,6 +34,7 @@ public partial class LoginPageViewModel : ObservableObject
             {
                 MainWinClass.LoginItem.Visibility = Visibility.Collapsed;
                 MainWinClass.UserItem.Visibility = Visibility.Visible;
+                MainWinClass.TunnelItem.Visibility = Visibility.Visible;
                 MainWinClass.RootNavigation.Navigate("用户页");
                 ShowTip(
                     "登录成功！",
@@ -56,11 +57,11 @@ public partial class LoginPageViewModel : ObservableObject
     private async Task RegisterClick()
     {
         ShowTip(
-            "跳转至网页中...", 
-            "请稍等...", 
-            ControlAppearance.Info, 
+            "跳转至网页中...",
+            "请稍等...",
+            ControlAppearance.Info,
             SymbolRegular.Tag24);
-        
+
         await Task.Delay(500);
         Process.Start(new ProcessStartInfo("https://panel.chmlfrp.cn/sign"));
     }
