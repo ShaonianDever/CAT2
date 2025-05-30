@@ -1,4 +1,4 @@
-﻿namespace CAT2;
+﻿namespace CAT2.Views.Pages;
 
 public partial class SettingPage
 {
