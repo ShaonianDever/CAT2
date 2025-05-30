@@ -1,16 +1,17 @@
-﻿<ui:FluentWindow x:Class="CAT2.MainWindow" Topmost="True" 
+﻿<ui:FluentWindow x:Class="CAT2.MainWindow" Topmost="True"
                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                  xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-                 xmlns:local="clr-namespace:CAT2"
+                 xmlns:pages="clr-namespace:CAT2.Views.Pages"
                  WindowBackdropType="Mica"
                  WindowCornerPreference="Round"
                  WindowStartupLocation="CenterScreen"
                  ExtendsContentIntoTitleBar="True"
-                 Title="ChmlFrp - Advanced Toolkit 2" 
+                 Title="ChmlFrp - Advanced Toolkit 2"
                  Height="550" Width="1050"
-                 MinHeight="450" MinWidth="800"
-                 MaxHeight="650" MaxWidth="1250">
+                 MinHeight="500" MinWidth="950"
+                 MaxHeight="750" MaxWidth="1450"
+                 Loaded="OnLoaded">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -35,6 +36,8 @@
 
         <Grid x:Name="MainGrid"
               Grid.Row="1">
+            <ui:ProgressRing x:Name="LoadingRing" IsIndeterminate="True" Visibility="Visible" />
+
             <ui:NavigationView x:Name="RootNavigation"
                                PaneDisplayMode="Left"
                                IsBackButtonVisible="Collapsed">
@@ -43,19 +46,25 @@
                                            x:Name="LoginItem"
                                            Visibility="Collapsed"
                                            NavigationCacheMode="Enabled"
-                                           TargetPageType="{x:Type local:LoginPage}" />
+                                           TargetPageType="{x:Type pages:LoginPage}" />
 
                     <ui:NavigationViewItem Content="用户页" Icon="{ui:SymbolIcon ContactCard24}"
                                            x:Name="UserItem"
                                            Visibility="Collapsed"
                                            NavigationCacheMode="Enabled"
-                                           TargetPageType="{x:Type local:UserinfoPage}" />
+                                           TargetPageType="{x:Type pages:UserinfoPage}" />
+
+                    <ui:NavigationViewItem Content="隧道管理" Icon="{ui:SymbolIcon Channel24}"
+                                           x:Name="TunnelItem"
+                                           Visibility="Collapsed"
+                                           NavigationCacheMode="Enabled"
+                                           TargetPageType="{x:Type pages:TunnelPage}" />
                 </ui:NavigationView.MenuItems>
 
                 <ui:NavigationView.FooterMenuItems>
-                    <ui:NavigationViewItem Content="设置" Icon="{ui:SymbolIcon Settings32}"
+                    <ui:NavigationViewItem Content="设置" Icon="{ui:SymbolIcon Settings24}"
                                            NavigationCacheMode="Enabled"
-                                           TargetPageType="{x:Type local:SettingPage}" />
+                                           TargetPageType="{x:Type pages:SettingPage}" />
                 </ui:NavigationView.FooterMenuItems>
             </ui:NavigationView>
         </Grid>
