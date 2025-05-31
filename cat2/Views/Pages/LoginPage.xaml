@@ -20,8 +20,8 @@
             <ui:TextBox Margin="0,15,0,0"
                         Text="{Binding Username,Mode=TwoWay}"
                         FontSize="16"
-                        PlaceholderText="用户名" 
-                        Icon="{ui:SymbolIcon Rename16}"/>
+                        PlaceholderText="用户名"
+                        Icon="{ui:SymbolIcon Rename16}" />
 
             <ui:PasswordBox Margin="0,15,0,0"
                             Password="{Binding Password,Mode=TwoWay}"
