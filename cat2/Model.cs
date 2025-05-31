@@ -1,7 +1,4 @@
-﻿using System.Windows;
-using Wpf.Ui.Controls;
-
-namespace CAT2;
+﻿namespace CAT2.Views;
 
 public abstract class Constant
 {

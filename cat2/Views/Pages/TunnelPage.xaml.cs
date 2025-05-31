@@ -1,8 +1,5 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Controls.Primitives;
-using System.Windows.Threading;
-using Wpf.Ui.Controls;
+﻿using System.Windows.Controls.Primitives;
+using Constant = CAT2.Views.Constant;
 
 namespace CAT2.Views.Pages;
 
@@ -42,7 +39,7 @@ public partial class TunnelPage
     {
         LoadingRing.Visibility = Visibility.Visible;
         TunnelCard.Visibility = Visibility.Collapsed;
-        var tunnelNames = await ChmlFrp.SDK.API.Tunnel.GetTunnelNames();
+        var tunnelNames = await Tunnel.GetTunnelNames();
         if (tunnelNames != null)
         {
             if (tunnelNames.Count != 0)
@@ -50,7 +47,7 @@ public partial class TunnelPage
                 ListView.Items.Clear();
                 foreach (var tunnelName in tunnelNames)
                 {
-                    var tunnelinfo = await ChmlFrp.SDK.API.Tunnel.GetTunnelData(tunnelName);
+                    var tunnelinfo = await Tunnel.GetTunnelData(tunnelName);
 
                     ListView.Items.Add(new TunnelViewItem
                     {

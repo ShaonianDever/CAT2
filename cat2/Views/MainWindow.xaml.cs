@@ -1,11 +1,7 @@
-﻿using System;
-using System.Windows;
-using ChmlFrp.SDK;
-using ChmlFrp.SDK.API;
-using Wpf.Ui.Appearance;
-using Wpf.Ui.Controls;
+﻿using System.Threading.Tasks;
+using Microsoft.Win32;
 
-namespace CAT2;
+namespace CAT2.Views;
 
 public partial class MainWindow
 {
@@ -14,14 +10,13 @@ public partial class MainWindow
     public MainWindow()
     {
         InitializeComponent();
+        SystemEvents.UserPreferenceChanged += OnSystemThemeChanged;
     }
 
     private async void OnLoaded(object sender, RoutedEventArgs e)
     {
         // 系统主题
-        ApplicationThemeManager.Apply(ApplicationThemeManager.GetSystemTheme() == SystemTheme.Dark
-            ? ApplicationTheme.Dark
-            : ApplicationTheme.Light);
+        if (ApplicationThemeManager.GetSystemTheme() is SystemTheme.Dark) ThemeButton.IsChecked = true;
 
         GlobalSnackbar = new Snackbar(new SnackbarPresenter())
         {
@@ -51,10 +46,28 @@ public partial class MainWindow
         Topmost = false;
     }
 
+    private async void OnSystemThemeChanged(object sender, UserPreferenceChangedEventArgs e)
+    {
+        ThemeButton.IsChecked = !ThemeButton.IsChecked;
+        SystemEvents.UserPreferenceChanged -= OnSystemThemeChanged;
+        await Task.Delay(100);
+        SystemEvents.UserPreferenceChanged += OnSystemThemeChanged;
+    }
+
     private void ThemesChanged(object sender, RoutedEventArgs e)
     {
         ApplicationThemeManager.Apply(ApplicationThemeManager.GetAppTheme() is ApplicationTheme.Dark
             ? ApplicationTheme.Light
             : ApplicationTheme.Dark);
+    }
+
+    private void CloseThis(object sender, RoutedEventArgs e)
+    {
+        Close();
+    }
+
+    private void MinimizeThis(object sender, RoutedEventArgs e)
+    {
+        WindowState = WindowState.Minimized;
     }
 }

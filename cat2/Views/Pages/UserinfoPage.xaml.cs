@@ -1,9 +1,5 @@
-﻿using System;
-using System.IO;
-using System.Windows;
+﻿using System.IO;
 using System.Windows.Media.Imaging;
-using System.Windows.Threading;
-using Wpf.Ui.Controls;
 
 namespace CAT2.Views.Pages;
 
@@ -26,7 +22,7 @@ public partial class UserinfoPage
         LoadingRing.Visibility = Visibility.Visible;
         TunnelCard.Visibility = Visibility.Collapsed;
 
-        var userInfo = await ChmlFrp.SDK.User.GetUserInfo();
+        var userInfo = await User.GetUserInfo();
         if (userInfo != null)
         {
             if (await ChmlFrp.SDK.Constant.GetFile(userInfo.userimg, _tempUserImage))
