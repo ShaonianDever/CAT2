@@ -32,6 +32,7 @@ public partial class TunnelPage
     public TunnelPage()
     {
         InitializeComponent();
+        LoadTunnelInfo(null, null);
         var timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(30) };
         timer.Tick += LoadTunnelInfo;
         timer.Start();

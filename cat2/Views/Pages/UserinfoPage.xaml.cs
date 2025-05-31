@@ -15,6 +15,7 @@ public partial class UserinfoPage
     public UserinfoPage()
     {
         InitializeComponent();
+        LoadUserInfo(null, null);
         var timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(30) };
         timer.Tick += LoadUserInfo;
         timer.Start();
