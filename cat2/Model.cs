@@ -18,16 +18,4 @@ public abstract class Constant
         };
         await MainWinClass.GlobalSnackbar.ShowAsync();
     }
-
-    public static void ShowRing()
-    {
-        MainWinClass.LoadingRing.IsIndeterminate = true;
-        MainWinClass.LoadingRing.Visibility = Visibility.Visible;
-    }
-
-    public static void HideRing()
-    {
-        MainWinClass.LoadingRing.IsIndeterminate = false;
-        MainWinClass.LoadingRing.Visibility = Visibility.Collapsed;
-    }
 }

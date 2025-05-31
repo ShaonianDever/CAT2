@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows;
 using ChmlFrp.SDK;
@@ -9,6 +10,26 @@ using Wpf.Ui.Controls;
 using static CAT2.Constant;
 
 namespace CAT2;
+
+public partial class App
+{
+    public App()
+    {
+        Paths.Init("CAT2");
+        InitializeComponent();
+
+        AppDomain.CurrentDomain.UnhandledException += (_, args) =>
+        {
+            if (args.ExceptionObject is not Exception ex) return;
+            Paths.WritingLog($"Error: \n{ex.Message}");
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = Paths.LogFilePath,
+                UseShellExecute = true
+            });
+        };
+    }
+}
 
 public partial class LoginPageViewModel : ObservableObject
 {

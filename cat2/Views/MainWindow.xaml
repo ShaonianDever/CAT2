@@ -34,10 +34,7 @@
             </ui:TitleBar.TrailingContent>
         </ui:TitleBar>
 
-        <Grid x:Name="MainGrid"
-              Grid.Row="1">
-            <ui:ProgressRing x:Name="LoadingRing" IsIndeterminate="True" Visibility="Visible" />
-
+        <Grid x:Name="MainGrid" Grid.Row="1">
             <ui:NavigationView x:Name="RootNavigation"
                                PaneDisplayMode="Left"
                                IsBackButtonVisible="Collapsed">

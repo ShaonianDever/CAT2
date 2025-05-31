@@ -45,8 +45,6 @@ public partial class MainWindow
         else
         {
             LoginItem.Visibility = Visibility.Visible;
-            LoadingRing.IsIndeterminate = false;
-            LoadingRing.Visibility = Visibility.Collapsed;
             RootNavigation.Navigate("登录");
         }
 
