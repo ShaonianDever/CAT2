@@ -10,9 +10,6 @@ public partial class App
 {
     public App()
     {
-        Paths.Init("CAT2");
-        InitializeComponent();
-
         AppDomain.CurrentDomain.UnhandledException += (_, args) =>
         {
             if (args.ExceptionObject is not Exception ex) return;
@@ -23,13 +20,15 @@ public partial class App
                 UseShellExecute = true
             });
         };
+
+        Paths.Init("CAT2");
     }
 }
 
 public partial class LoginPageViewModel : ObservableObject
 {
-    [ObservableProperty] private string _username = User.Username;
     [ObservableProperty] private string _password = User.Password;
+    [ObservableProperty] private string _username = User.Username;
 
     [RelayCommand]
     private async Task LoginClick()

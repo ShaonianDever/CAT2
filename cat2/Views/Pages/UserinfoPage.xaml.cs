@@ -1,4 +1,7 @@
-﻿using System.IO;
+﻿using System.Diagnostics;
+using System.IO;
+using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 
 namespace CAT2.Views.Pages;
@@ -54,5 +57,18 @@ public partial class UserinfoPage
 
         LoadingRing.Visibility = Visibility.Collapsed;
         TunnelCard.Visibility = Visibility.Visible;
+    }
+
+    private async void OnSignOut(object sender, RoutedEventArgs e)
+    {
+        Sign.Signout();
+        Constant.ShowTip(
+            "已退出登录",
+            "请重新登录以继续使用。",
+            ControlAppearance.Info,
+            SymbolRegular.SignOut24);
+        await Task.Delay(1000);
+        Process.Start(Assembly.GetExecutingAssembly().Location);
+        Constant.MainWinClass.Close();
     }
 }

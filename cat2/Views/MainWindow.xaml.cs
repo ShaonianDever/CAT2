@@ -28,8 +28,6 @@ public partial class MainWindow
         };
         MainGrid.Children.Add(GlobalSnackbar);
 
-        Paths.Init("CAT2");
-
         await Sign.Signin();
         if (Sign.IsSignin)
         {

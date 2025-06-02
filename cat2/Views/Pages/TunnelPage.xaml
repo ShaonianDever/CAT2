@@ -30,6 +30,7 @@
                                 <ToggleButton HorizontalAlignment="Right"
                                               VerticalAlignment="Top"
                                               Tag="{TemplateBinding Content}"
+                                              IsChecked="{TemplateBinding IsTunnelStarted}"
                                               Checked="StartTunnel"
                                               Unchecked="StopTunnel"
                                               Content="启动" />
@@ -44,14 +45,13 @@
     <Grid>
         <ui:ProgressRing x:Name="LoadingRing" IsIndeterminate="True" Visibility="Collapsed" />
 
-        <ui:Card x:Name="TunnelCard" Margin="35,35,35,15" Padding="15"
-                 VerticalAlignment="Stretch">
-            <StackPanel Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Stretch">
-                <ui:ListView x:Name="ListView" Visibility="Collapsed" />
 
-                <ui:TextBlock x:Name="NoTunnelText" Text="暂无隧道信息" Foreground="Red" HorizontalAlignment="Center"
-                              VerticalAlignment="Center" Margin="0,20,0,0" FontSize="16" Visibility="Collapsed" />
-            </StackPanel>
-        </ui:Card>
+        <StackPanel x:Name="TunnelCard" Margin="35,35,35,15" Orientation="Vertical" VerticalAlignment="Center"
+                    HorizontalAlignment="Stretch">
+            <ui:ListView x:Name="ListView" Visibility="Collapsed" />
+
+            <ui:TextBlock x:Name="NoTunnelText" Text="暂无隧道信息" Foreground="Red" HorizontalAlignment="Center"
+                          VerticalAlignment="Center" Margin="0,20,0,0" FontSize="16" Visibility="Collapsed" />
+        </StackPanel>
     </Grid>
 </Page>

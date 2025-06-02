@@ -12,7 +12,7 @@
     <ItemGroup>
         <Resource Include="logo.ico"/>
         <PackageReference Include="WPF-UI" Version="4.0.2"/>
-        <PackageReference Include="ChmlFrp.SDK" Version="0.1.0"/>
+        <PackageReference Include="ChmlFrp.SDK" Version="0.1.2"/>
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0"/>
         <PackageReference Include="Costura.Fody" PrivateAssets="All" Version="6.0.0"/>
     </ItemGroup>
