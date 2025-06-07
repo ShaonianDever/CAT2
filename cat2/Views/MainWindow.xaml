@@ -2,7 +2,10 @@
                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                  xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+                 xmlns:viewModels="clr-namespace:CAT2.ViewModels"
                  xmlns:pages="clr-namespace:CAT2.Views.Pages"
+                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
                  WindowBackdropType="Mica"
                  WindowCornerPreference="Round"
                  WindowStartupLocation="CenterScreen"
@@ -10,8 +13,11 @@
                  Title="ChmlFrp - Advanced Toolkit 2"
                  Height="550" Width="1050"
                  MinHeight="500" MinWidth="950"
-                 MaxHeight="750" MaxWidth="1450"
-                 Loaded="OnLoaded">
+                 MaxHeight="750" MaxWidth="1450">
+
+    <ui:FluentWindow.DataContext>
+        <viewModels:MainWindowViewModel />
+    </ui:FluentWindow.DataContext>
 
     <Grid>
         <Grid.RowDefinitions>
@@ -29,20 +35,19 @@
                 <StackPanel Margin="0,5,5,0" VerticalAlignment="Top" Orientation="Horizontal">
                     <ToggleButton Height="30" Width="45"
                                   VerticalAlignment="Top"
-                                  x:Name="ThemeButton"
-                                  Checked="ThemesChanged"
-                                  Unchecked="ThemesChanged">
+                                  IsChecked="{Binding IsDarkTheme,Mode=TwoWay}"
+                                  Command="{Binding ThemesChangedCommand}">
                         <ui:SymbolIcon Symbol="DarkTheme24" />
                     </ToggleButton>
 
                     <ui:Button Height="30" Width="45"
                                Margin="5,0,0,0"
-                               Click="MinimizeThis"
+                               Command="{Binding MinimizeThisCommand}"
                                Icon="{ui:SymbolIcon ArrowMinimize24}" />
 
                     <ui:Button Height="30" Width="45"
                                Margin="5,0,0,0"
-                               Click="CloseThis"
+                               Command="{Binding CloseThisCommand}"
                                Icon="{ui:SymbolIcon ArrowExit20}" />
                 </StackPanel>
             </ui:TitleBar.TrailingContent>

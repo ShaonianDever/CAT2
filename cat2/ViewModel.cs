@@ -4,7 +4,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using static CAT2.Views.Constant;
 
-namespace CAT2.Views;
+namespace CAT2.ViewModels;
 
 public partial class App
 {
@@ -47,10 +47,10 @@ public partial class LoginPageViewModel : ObservableObject
 
             if (Sign.IsSignin)
             {
-                MainWinClass.LoginItem.Visibility = Visibility.Collapsed;
-                MainWinClass.UserItem.Visibility = Visibility.Visible;
-                MainWinClass.TunnelItem.Visibility = Visibility.Visible;
-                MainWinClass.RootNavigation.Navigate("用户页");
+                MainClass.LoginItem.Visibility = Visibility.Collapsed;
+                MainClass.UserItem.Visibility = Visibility.Visible;
+                MainClass.TunnelItem.Visibility = Visibility.Visible;
+                MainClass.RootNavigation.Navigate("用户页");
                 ShowTip(
                     "登录成功！",
                     $"欢迎回来，{Username}！",
@@ -79,5 +79,55 @@ public partial class LoginPageViewModel : ObservableObject
 
         await Task.Delay(500);
         Process.Start(new ProcessStartInfo("https://panel.chmlfrp.cn/sign"));
+    }
+}
+
+public partial class MainWindowViewModel : ObservableObject
+{
+    [ObservableProperty] private bool _isDarkTheme;
+
+    [RelayCommand]
+    private void MinimizeThis()
+    {
+        MainClass.WindowState = WindowState.Minimized;
+    }
+
+    [RelayCommand]
+    private void CloseThis()
+    {
+        MainClass.Close();
+    }
+
+    [RelayCommand]
+    private void ThemesChanged()
+    {
+        ApplicationThemeManager.Apply(ApplicationThemeManager.GetAppTheme() is ApplicationTheme.Dark
+            ? ApplicationTheme.Light
+            : ApplicationTheme.Dark);
+    }
+
+    [RelayCommand]
+    private async Task Loaded()
+    {
+        if (ApplicationThemeManager.GetSystemTheme() is SystemTheme.Dark)
+        {
+            IsDarkTheme = true;
+            ApplicationThemeManager.Apply(ApplicationTheme.Dark);
+        }
+
+        await Sign.Signin();
+        if (Sign.IsSignin)
+        {
+            MainClass.UserItem.Visibility = Visibility.Visible;
+            MainClass.TunnelItem.Visibility = Visibility.Visible;
+            MainClass.RootNavigation.Navigate("用户页");
+        }
+        else
+        {
+            MainClass.LoginItem.Visibility = Visibility.Visible;
+            MainClass.RootNavigation.Navigate("登录");
+        }
+
+        MainClass.Topmost = false;
     }
 }

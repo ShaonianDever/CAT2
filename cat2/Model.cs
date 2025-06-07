@@ -1,18 +1,33 @@
-﻿namespace CAT2.Views;
+﻿using System.Linq;
+
+namespace CAT2.Views;
 
 public abstract class Constant
 {
-    public static readonly MainWindow MainWinClass = (MainWindow)Application.Current.MainWindow;
+    public static readonly MainWindow MainClass = (MainWindow)Application.Current.MainWindow;
 
     public static async void ShowTip(string title, string content, ControlAppearance appearance, SymbolRegular icon)
     {
-        MainWinClass.GlobalSnackbar.Title = title;
-        MainWinClass.GlobalSnackbar.Content = content;
-        MainWinClass.GlobalSnackbar.Appearance = appearance;
-        MainWinClass.GlobalSnackbar.Icon = new SymbolIcon(icon)
+        var globalSnackbar = new Snackbar(new SnackbarPresenter())
         {
-            FontSize = 32
+            Margin = new Thickness(45, 0, 20, 40),
+            HorizontalAlignment = HorizontalAlignment.Stretch,
+            VerticalAlignment = VerticalAlignment.Bottom,
+            Timeout = TimeSpan.FromMilliseconds(2000),
+            IsCloseButtonEnabled = false,
+            Title = title,
+            Content = content,
+            Appearance = appearance,
+            Icon = new SymbolIcon(icon)
+            {
+                FontSize = 32
+            }
         };
-        await MainWinClass.GlobalSnackbar.ShowAsync();
+
+        foreach (var child in MainClass.MainGrid.Children.OfType<Snackbar>().ToList())
+            MainClass.MainGrid.Children.Remove(child);
+
+        MainClass.MainGrid.Children.Add(globalSnackbar);
+        await globalSnackbar.ShowAsync();
     }
 }

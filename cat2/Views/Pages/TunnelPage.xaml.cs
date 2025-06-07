@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-using System.Threading.Tasks;
-using System.Windows.Controls.Primitives;
+﻿using System.Windows.Controls.Primitives;
 using ChmlFrp.SDK.Frpc;
 
 namespace CAT2.Views.Pages;
@@ -41,7 +39,7 @@ public partial class TunnelPage
     {
         InitializeComponent();
         LoadTunnelInfo(null, null);
-        var timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(30) };
+        var timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(50) };
         timer.Tick += LoadTunnelInfo;
         timer.Start();
     }
@@ -58,24 +56,22 @@ public partial class TunnelPage
                 ListView.Items.Clear();
                 foreach (var tunnelName in tunnelNames)
                 {
-                    var tunnelinfo = await Tunnel.GetTunnelData(tunnelName);
+                    var tunnelInfo = await Tunnel.GetTunnelData(tunnelName);
 
                     ListView.Items.Add(new TunnelViewItem
                     {
                         Content = tunnelName,
-                        Id = $"#{tunnelinfo.id}",
-                        IsTunnelStarted = await Stop.IsTunnelRunning(tunnelinfo.name),
-                        Info = $"{tunnelinfo.node}-{tunnelinfo.nport}-{tunnelinfo.type}"
+                        Id = $"#{tunnelInfo.id}",
+                        IsTunnelStarted = await Stop.IsTunnelRunning(tunnelInfo.name),
+                        Info = $"{tunnelInfo.node}-{tunnelInfo.nport}-{tunnelInfo.type}"
                     });
                 }
 
                 ListView.Visibility = Visibility.Visible;
-                NoTunnelText.Visibility = Visibility.Collapsed;
             }
             else
             {
                 ListView.Visibility = Visibility.Collapsed;
-                NoTunnelText.Visibility = Visibility.Visible;
             }
         }
         else
@@ -98,32 +94,26 @@ public partial class TunnelPage
         if (tag is null) return;
         toggleButton.IsEnabled = false;
 
-        Action stopTrueHandler = null;
-        Action stopFalseHandler = null;
+        Stop.StopTunnel(tag, StopTrueHandler, StopFalseHandler);
+        return;
 
-        stopTrueHandler = () =>
+        void StopTrueHandler()
         {
-            Stop.OnStopTrue -= stopTrueHandler;
             Application.Current.Dispatcher.Invoke(() =>
             {
                 Constant.ShowTip("隧道关闭成功", $"隧道 {tag} 已成功关闭。", ControlAppearance.Success, SymbolRegular.Checkmark24);
                 toggleButton.IsEnabled = true;
             });
-        };
+        }
 
-        stopFalseHandler = () =>
+        void StopFalseHandler()
         {
-            Stop.OnStopFalse -= stopFalseHandler;
             Application.Current.Dispatcher.Invoke(() =>
             {
                 Constant.ShowTip("隧道关闭失败", $"隧道 {tag} 已退出。", ControlAppearance.Danger, SymbolRegular.TagError24);
                 toggleButton.IsEnabled = true;
             });
-        };
-
-        Stop.OnStopTrue += stopTrueHandler;
-        Stop.OnStopFalse += stopFalseHandler;
-        Stop.StopTunnel(tag);
+        }
     }
 
     private void StartTunnel(object sender, RoutedEventArgs routedEventArgs)
@@ -133,55 +123,47 @@ public partial class TunnelPage
         if (tag is null) return;
         toggleButton.IsEnabled = false;
 
-        Action startTrueHandler = null;
-        Action startFalseHandler = null;
-        Action iniUnKnown = null;
+        Start.StartTunnel(tag, StartTrueHandler, StartFalseHandler, IniUnKnown);
+        return;
 
-        startTrueHandler = () =>
+        void IniUnKnown()
         {
-            Start.OnStartTrue -= startTrueHandler;
             Application.Current.Dispatcher.Invoke(() =>
             {
-                Constant.ShowTip("隧道启动成功", $"隧道 {tag} 已成功启动。", ControlAppearance.Success, SymbolRegular.Checkmark24);
-                toggleButton.IsEnabled = true;
-            });
-        };
-
-        startFalseHandler = () =>
-        {
-            Start.OnStartFalse -= startFalseHandler;
-            Application.Current.Dispatcher.Invoke(() =>
-                Constant.ShowTip("隧道启动失败",
-                    $"隧道 {tag} 启动失败，具体请看日志。",
-                    ControlAppearance.Danger,
-                    SymbolRegular.TagError24));
-
-            Task.Run(async () =>
-            {
-                await Task.Delay(1000);
-                Process.Start(new ProcessStartInfo
-                {
-                    FileName = Start.FrpclogFilePath,
-                    UseShellExecute = true
-                });
-                Application.Current.Dispatcher.Invoke(() =>
-                    toggleButton.IsChecked = false);
-            });
-        };
-
-        iniUnKnown += () =>
-        {
-            Start.OnIniUnKnown -= iniUnKnown;
-            Application.Current.Dispatcher.Invoke(() =>
-                Constant.ShowTip("隧道启动数据获取失败",
+                Constant.ShowTip(
+                    "隧道启动数据获取失败",
                     "请检查网络状态，或查看API状态。",
                     ControlAppearance.Danger,
-                    SymbolRegular.TagError24));
-        };
+                    SymbolRegular.TagError24);
 
-        Start.OnStartTrue += startTrueHandler;
-        Start.OnStartFalse += startFalseHandler;
-        Start.OnIniUnKnown += iniUnKnown;
-        Start.StartTunnel(tag);
+                toggleButton.IsChecked = false;
+            });
+        }
+
+        void StartFalseHandler()
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                Constant.ShowTip(
+                    "隧道启动失败",
+                    $"隧道 {tag} 启动失败，具体请看日志。",
+                    ControlAppearance.Danger,
+                    SymbolRegular.TagError24);
+
+                toggleButton.IsChecked = false;
+            });
+        }
+
+        void StartTrueHandler()
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                Constant.ShowTip("隧道启动成功",
+                    $"隧道 {tag} 已成功启动。",
+                    ControlAppearance.Success,
+                    SymbolRegular.Checkmark24);
+                toggleButton.IsEnabled = true;
+            });
+        }
     }
 }

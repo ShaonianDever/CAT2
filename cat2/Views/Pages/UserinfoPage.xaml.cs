@@ -15,7 +15,7 @@ public partial class UserinfoPage
     {
         InitializeComponent();
         LoadUserInfo(null, null);
-        var timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(30) };
+        var timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(50) };
         timer.Tick += LoadUserInfo;
         timer.Start();
     }
@@ -69,6 +69,6 @@ public partial class UserinfoPage
             SymbolRegular.SignOut24);
         await Task.Delay(1000);
         Process.Start(Assembly.GetExecutingAssembly().Location);
-        Constant.MainWinClass.Close();
+        Constant.MainClass.Close();
     }
 }

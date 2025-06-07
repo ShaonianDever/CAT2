@@ -9,7 +9,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type pages:TunnelViewItem}">
-                        <ui:Card>
+                        <ui:Card Margin="0,0,0,5">
                             <Grid>
                                 <StackPanel VerticalAlignment="Center" HorizontalAlignment="Left"
                                             Orientation="Horizontal">
@@ -27,13 +27,15 @@
 
                                 </StackPanel>
 
-                                <ToggleButton HorizontalAlignment="Right"
-                                              VerticalAlignment="Top"
-                                              Tag="{TemplateBinding Content}"
-                                              IsChecked="{TemplateBinding IsTunnelStarted}"
-                                              Checked="StartTunnel"
-                                              Unchecked="StopTunnel"
-                                              Content="启动" />
+                                <ui:ToggleSwitch HorizontalAlignment="Right"
+                                                 VerticalAlignment="Top"
+                                                 Margin="0,0,15,0"
+                                                 Tag="{TemplateBinding Content}"
+                                                 IsChecked="{TemplateBinding IsTunnelStarted}"
+                                                 Checked="StartTunnel"
+                                                 Unchecked="StopTunnel"
+                                                 OffContent="启动"
+                                                 OnContent="关闭" />
                             </Grid>
                         </ui:Card>
                     </ControlTemplate>
@@ -43,15 +45,16 @@
     </Page.Resources>
 
     <Grid>
-        <ui:ProgressRing x:Name="LoadingRing" IsIndeterminate="True" Visibility="Collapsed" />
+        <ui:ProgressRing x:Name="LoadingRing" IsIndeterminate="True" />
 
-
-        <StackPanel x:Name="TunnelCard" Margin="35,35,35,15" Orientation="Vertical" VerticalAlignment="Center"
-                    HorizontalAlignment="Stretch">
-            <ui:ListView x:Name="ListView" Visibility="Collapsed" />
-
-            <ui:TextBlock x:Name="NoTunnelText" Text="暂无隧道信息" Foreground="Red" HorizontalAlignment="Center"
-                          VerticalAlignment="Center" Margin="0,20,0,0" FontSize="16" Visibility="Collapsed" />
-        </StackPanel>
+        <ui:Card x:Name="TunnelCard" Margin="35,35,35,15">
+            <Grid>
+                <ScrollViewer MaxHeight="450"
+                              VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Disabled">
+                    <ui:ListView x:Name="ListView" />
+                </ScrollViewer>
+            </Grid>
+        </ui:Card>
     </Grid>
 </Page>

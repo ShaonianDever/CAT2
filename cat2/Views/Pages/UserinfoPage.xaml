@@ -14,7 +14,7 @@
     <Grid>
         <ui:ProgressRing x:Name="LoadingRing" IsIndeterminate="True" Visibility="Collapsed" />
 
-        <ui:Card x:Name="TunnelCard" Margin="0,45,35,35" HorizontalAlignment="Right"
+        <ui:Card x:Name="TunnelCard" Margin="0,25,35,25" HorizontalAlignment="Right"
                  VerticalAlignment="Stretch">
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10">
                 <ui:Image x:Name="Image" CornerRadius="100" Width="150" Height="150" Margin="0,0,0,10" />
@@ -32,7 +32,7 @@
                            Icon="{ui:SymbolIcon SignOut24}">
                     <ui:Button.ContextMenu>
                         <ContextMenu>
-                            <MenuItem Click="OnSignOut" Foreground="Red" Header="确定要退出登录吗?" />
+                            <MenuItem ToolTip="还在犹豫什么？快来退出登录吧！" Click="OnSignOut" Header="确定要退出登录吗?" />
                         </ContextMenu>
                     </ui:Button.ContextMenu>
                 </ui:Button>
