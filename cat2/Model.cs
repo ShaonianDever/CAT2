@@ -1,8 +1,9 @@
 ﻿using System.Linq;
+using CAT2.Views;
 
-namespace CAT2.Views;
+namespace CAT2;
 
-public abstract class Constant
+public abstract class Model
 {
     public static readonly MainWindow MainClass = (MainWindow)Application.Current.MainWindow;
 
