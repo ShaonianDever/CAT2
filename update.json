@@ -2,18 +2,14 @@
     "CAT1": {
         "version": "0.0.3",
         "data": {
-            "url": "",
-            "text": "",
-            "title": ""
+            "url": ""
         }
     },
     
     "CAT2": {
-        "version": "1.0.1",
+        "version": "1.0.1.1",
         "data": {
-            "url": "",
-            "text": "",
-            "title": ""
+            "url": "https://gitcode.com/Qyzgj/cat2/releases/download/1.0.1.1/ChmlFrp%20-%20Advanced%20Toolkit%202.exe"
         }
     },
     "state": "success"
