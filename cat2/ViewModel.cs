@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using ChmlFrp.SDK;
-using ChmlFrp.SDK.Frpc;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
@@ -36,8 +35,8 @@ public partial class App
 
 public partial class LoginPageViewModel : ObservableObject
 {
-    [ObservableProperty] private string _password = User.Password;
-    [ObservableProperty] private string _username = User.Username;
+    [ObservableProperty] private string _password;
+    [ObservableProperty] private string _username;
 
     [RelayCommand]
     private async Task LoginClick()
@@ -130,7 +129,7 @@ public partial class UserinfoPageViewModel : ObservableObject
             return;
         }
 
-        if (await Constant.GetFile(userInfo.userimg, _tempUserImage))
+        if (await Http.GetFile(userInfo.userimg, _tempUserImage))
         {
             CurrentImage = new BitmapImage();
             CurrentImage.BeginInit();
@@ -211,7 +210,7 @@ public partial class TunnelPageViewModel : ObservableObject
                 {
                     Name = tunnelName,
                     Id = $"#{tunnelInfo.id}",
-                    IsTunnelStarted = await Stop.IsTunnelRunning(tunnelInfo.name),
+                    IsTunnelStarted = await ChmlFrp.SDK.Services.Tunnel.IsTunnelRunning(tunnelInfo.name),
                     Info = $"{tunnelInfo.node}-{tunnelInfo.nport}-{tunnelInfo.type}"
                 });
             }
@@ -229,11 +228,36 @@ public partial class TunnelPageViewModel : ObservableObject
         public bool IsTunnelStarted { get; set; }
 
         [RelayCommand]
-        private void StartTunnel()
+        private void Tunnel()
         {
             if (IsTunnelStarted)
             {
-                Start.StartTunnel(Name, StartTrueHandler, StartFalseHandler, IniUnKnown);
+                ChmlFrp.SDK.Services.Tunnel.StartTunnel(Name, StartTrueHandler, StartFalseHandler, IniUnKnown,
+                    FrpcNotExists, TunnelRunning);
+
+                void TunnelRunning()
+                {
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        ShowTip(
+                            "隧道已在运行",
+                            $"隧道 {Name} 已在运行中。",
+                            ControlAppearance.Danger,
+                            SymbolRegular.Warning24);
+                    });
+                }
+
+                void FrpcNotExists()
+                {
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        ShowTip(
+                            "FRPC 暂未安装",
+                            "请等待一会，或重新启动。（软件会自动安装）",
+                            ControlAppearance.Danger,
+                            SymbolRegular.TagError24);
+                    });
+                }
 
                 void IniUnKnown()
                 {
@@ -272,7 +296,7 @@ public partial class TunnelPageViewModel : ObservableObject
             }
             else
             {
-                Stop.StopTunnel(Name, StopTrueHandler, StopFalseHandler);
+                ChmlFrp.SDK.Services.Tunnel.StopTunnel(Name, StopTrueHandler, StopFalseHandler);
 
                 void StopTrueHandler()
                 {
@@ -342,6 +366,7 @@ public partial class MainWindowViewModel : ObservableObject
         }
 
         MainClass.Topmost = false;
+        UpdateApp();
     }
 
     [RelayCommand]

@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Reflection;
 using CAT2.Views;
 
 namespace CAT2;
@@ -30,5 +33,27 @@ public abstract class Model
 
         MainClass.MainGrid.Children.Add(globalSnackbar);
         await globalSnackbar.ShowAsync();
+    }
+
+    public static async void UpdateApp()
+    {
+        var jObject = await Http.GetApi("https://cat2.chmlfrp.com/update.json");
+        if (jObject == null || (string)jObject["state"] != "success") return;
+        if ((string)jObject["CAT2"]!["version"] == Assembly.GetExecutingAssembly().GetName().Version.ToString()) return;
+
+        var temp = Path.GetTempFileName();
+        if (!await Http.GetFile((string)jObject["CAT2"]["data"]!["url"], temp)) return;
+
+        var processPath = Process.GetCurrentProcess().MainModule?.FileName;
+        Process.Start(new ProcessStartInfo(
+            "cmd.exe",
+            $"/c timeout /t 1 /nobreak & move /y \"{temp}\" \"{processPath}\" & start \"\" \"{processPath}\" & exit"
+        )
+        {
+            UseShellExecute = false,
+            CreateNoWindow = true
+        });
+
+        MainClass.Close();
     }
 }

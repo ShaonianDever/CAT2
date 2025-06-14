@@ -2,19 +2,21 @@
 
     <PropertyGroup>
         <UseWPF>true</UseWPF>
+        <Version>1.0.1.1</Version>
         <OutputType>WinExe</OutputType>
         <LangVersion>Latest</LangVersion>
         <TargetFramework>net48</TargetFramework>
         <ApplicationIcon>logo.ico</ApplicationIcon>
         <AssemblyName>ChmlFrp - Advanced Toolkit 2</AssemblyName>
+        <Copyright>Copyright © 2025 Qusay Diaz. All rights reserved.</Copyright>
     </PropertyGroup>
 
     <ItemGroup>
         <Resource Include="logo.ico"/>
-        <PackageReference Include="WPF-UI" Version="4.0.2"/>
-        <PackageReference Include="ChmlFrp.SDK" Version="0.1.3"/>
-        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0"/>
-        <PackageReference Include="Costura.Fody" PrivateAssets="All" Version="6.0.0"/>
+        <PackageReference Include="WPF-UI" Version="*"/>
+        <PackageReference Include="ChmlFrp.SDK" Version="*"/>
+        <PackageReference Include="CommunityToolkit.Mvvm" Version="*"/>
+        <PackageReference Include="Costura.Fody" PrivateAssets="All" Version="*"/>
     </ItemGroup>
 
 </Project>
