@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using CAT2.Views;
 
 namespace CAT2;
@@ -41,19 +42,25 @@ public abstract class Model
         if (jObject == null || (string)jObject["state"] != "success") return;
         if ((string)jObject["CAT2"]!["version"] == Assembly.GetExecutingAssembly().GetName().Version.ToString()) return;
 
+        ShowTip("发现新版本",
+            "正在更新应用，请稍候...",
+            ControlAppearance.Light,
+            SymbolRegular.Add48);
+
         var temp = Path.GetTempFileName();
         if (!await Http.GetFile((string)jObject["CAT2"]["data"]!["url"], temp)) return;
 
-        var processPath = Process.GetCurrentProcess().MainModule?.FileName;
-        Process.Start(new ProcessStartInfo(
-            "cmd.exe",
-            $"/c timeout /t 1 /nobreak & move /y \"{temp}\" \"{processPath}\" & start \"\" \"{processPath}\" & exit"
-        )
-        {
-            UseShellExecute = false,
-            CreateNoWindow = true
-        });
+        Process.Start(
+            new ProcessStartInfo
+            (
+                "cmd.exe",
+                $"""/c C:\Windows\System32\timeout.exe /t 3 /nobreak & move /y "{temp}" "{Process.GetCurrentProcess().MainModule?.FileName}" & start "" "{Process.GetCurrentProcess().MainModule?.FileName}" """
+            )
+            {
+                UseShellExecute = false,
+                CreateNoWindow = true
+            });
 
-        MainClass.Close();
+        Application.Current.Shutdown();
     }
 }
