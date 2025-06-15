@@ -1,5 +1,47 @@
 ﻿<Page x:Class="CAT2.Views.Pages.SettingPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Grid />
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:viewModels="clr-namespace:CAT2.ViewModels">
+
+    <Page.DataContext>
+        <viewModels:SettingPageViewModel />
+    </Page.DataContext>
+
+    <StackPanel Orientation="Vertical" Margin="15">
+        <Label FontWeight="Bold" Content="关于" />
+
+        <ui:CardExpander>
+            <ui:CardExpander.Header>
+                <Grid>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <ui:ImageIcon Margin="0,0,10,0" Height="30" Source="pack://application:,,,/logo.ico" />
+                        <ui:TextBlock Margin="10,0,0,0">
+                            <Run Text="{Binding AssemblyName}" />
+                            <LineBreak />
+                            <Run Foreground="{ui:ThemeResource TextFillColorDisabledBrush}"
+                                 Text="{Binding Copyright}"
+                                 FontSize="14" />
+                        </ui:TextBlock>
+                    </StackPanel>
+
+                    <Label Margin="10"
+                           Foreground="{ui:ThemeResource TextFillColorDisabledBrush}"
+                           HorizontalAlignment="Right"
+                           Content="{Binding Version}" />
+                </Grid>
+            </ui:CardExpander.Header>
+
+            <StackPanel Orientation="Vertical">
+                <Label Margin="5,0,0,10" Content="我是Qusay，目前是一名初中生，正在编写此应用程序。QQ:2976779544" />
+
+                <StackPanel Orientation="Horizontal">
+                    <ui:HyperlinkButton Icon="{ui:SymbolIcon Link48}" Content="查看作者BiliBili首页" Padding="5"
+                                        NavigateUri="https://space.bilibili.com/1582404131" Margin="0,0,5,0" />
+                    <ui:HyperlinkButton Icon="{ui:SymbolIcon Link48}" Content="查看Github项目" Padding="5"
+                                        NavigateUri="https://cat2.chmlfrp.com" />
+                </StackPanel>
+            </StackPanel>
+        </ui:CardExpander>
+    </StackPanel>
 </Page>

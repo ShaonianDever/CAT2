@@ -324,13 +324,38 @@ public partial class TunnelPageViewModel : ObservableObject
     }
 }
 
+public partial class SettingPageViewModel : ObservableObject
+{
+    [ObservableProperty] private string _version = Model.Version;
+    [ObservableProperty] private string _assemblyName = Model.AssemblyName;
+    [ObservableProperty] private string _copyright = Model.Copyright;
+}
+
 public partial class MainWindowViewModel : ObservableObject
 {
     [ObservableProperty] private bool _isDarkTheme;
+    [ObservableProperty] private string _assemblyName = Model.AssemblyName;
 
     public MainWindowViewModel()
     {
-        _ = Loaded();
+        MainClass.Loaded += async (_, _) =>
+        {
+            if (GetSystemTheme() == SystemTheme.Dark) ThemesChanged();
+
+            MainClass.RootNavigation.Navigate("登录");
+
+            await Sign.Signin();
+            if (Sign.IsSignin)
+            {
+                MainClass.LoginItem.Visibility = Visibility.Collapsed;
+                MainClass.UserItem.Visibility = Visibility.Visible;
+                MainClass.TunnelItem.Visibility = Visibility.Visible;
+                MainClass.RootNavigation.Navigate("用户页");
+            }
+
+            MainClass.Topmost = false;
+            UpdateApp();
+        };
 
         SystemEvents.UserPreferenceChanged += (_, _) =>
         {
@@ -346,27 +371,6 @@ public partial class MainWindowViewModel : ObservableObject
         var theme = GetAppTheme() == ApplicationTheme.Light;
         Apply(theme ? ApplicationTheme.Dark : ApplicationTheme.Light);
         IsDarkTheme = theme;
-    }
-
-    [RelayCommand]
-    private async Task Loaded()
-    {
-        if (GetSystemTheme() == SystemTheme.Dark) ThemesChanged();
-        await Sign.Signin();
-        if (Sign.IsSignin)
-        {
-            MainClass.UserItem.Visibility = Visibility.Visible;
-            MainClass.TunnelItem.Visibility = Visibility.Visible;
-            MainClass.RootNavigation.Navigate("用户页");
-        }
-        else
-        {
-            MainClass.LoginItem.Visibility = Visibility.Visible;
-            MainClass.RootNavigation.Navigate("登录");
-        }
-
-        MainClass.Topmost = false;
-        UpdateApp();
     }
 
     [RelayCommand]

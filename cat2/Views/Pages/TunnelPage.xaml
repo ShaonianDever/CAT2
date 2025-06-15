@@ -12,7 +12,9 @@
         <ui:ProgressRing Visibility="{Binding RingVisibility}" IsIndeterminate="True" />
 
         <ui:Card Visibility="{Binding CardVisibility}" Margin="35,35,35,15">
-            <Grid>
+            <StackPanel Orientation="Vertical">
+                <Label Margin="5" FontWeight="Bold" Content="隧道列表" />
+
                 <ScrollViewer MaxHeight="450"
                               VerticalScrollBarVisibility="Auto"
                               HorizontalScrollBarVisibility="Disabled">
@@ -51,7 +53,7 @@
                         </ListView.ItemTemplate>
                     </ui:ListView>
                 </ScrollViewer>
-            </Grid>
+            </StackPanel>
         </ui:Card>
     </Grid>
 </Page>
