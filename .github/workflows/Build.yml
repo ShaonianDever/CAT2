@@ -17,8 +17,8 @@ jobs:
           path: ~/.nuget/packages
           key: nuget-${{ runner.os }}-${{ hashFiles('**/*.csproj') }}
           restore-keys: nuget-${{ runner.os }}-
-      - run: dotnet build -c ${{ matrix.configuration }}
+      - run: dotnet publish -r win-x64 -c ${{ matrix.configuration }} /p:PublishSingleFile=true --self-contained false
       - uses: actions/upload-artifact@main
         with:
           name: ${{ matrix.configuration }}
-          path: '**/bin/**/*.exe'
+          path: '**/publish/'

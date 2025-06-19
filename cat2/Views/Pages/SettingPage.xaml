@@ -20,7 +20,7 @@
                             <Run Text="{Binding AssemblyName}" />
                             <LineBreak />
                             <Run Foreground="{ui:ThemeResource TextFillColorDisabledBrush}"
-                                 Text="{Binding Copyright}"
+                                 Text="© 2025 cat2.chmlfrp.com | Qusay Diaz"
                                  FontSize="14" />
                         </ui:TextBlock>
                     </StackPanel>
@@ -36,9 +36,10 @@
                 <Label Margin="5,0,0,10" Content="我是Qusay，目前是一名初中生，正在编写此应用程序。QQ:2976779544" />
 
                 <StackPanel Orientation="Horizontal">
-                    <ui:HyperlinkButton Icon="{ui:SymbolIcon Link48}" Content="查看作者BiliBili首页" Padding="5"
-                                        NavigateUri="https://space.bilibili.com/1582404131" Margin="0,0,5,0" />
-                    <ui:HyperlinkButton Icon="{ui:SymbolIcon Link48}" Content="查看Github项目" Padding="5"
+                    <ui:HyperlinkButton Icon="{ui:SymbolIcon Link48}" Content="查看作者BiliBili首页" Padding="8"
+                                        NavigateUri="https://space.bilibili.com/1582404131" Margin="0,0,10,0" />
+
+                    <ui:HyperlinkButton Icon="{ui:SymbolIcon Link48}" Content="查看Github项目" Padding="8"
                                         NavigateUri="https://cat2.chmlfrp.com" />
                 </StackPanel>
             </StackPanel>

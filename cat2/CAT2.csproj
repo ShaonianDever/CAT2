@@ -1,14 +1,14 @@
-<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <UseWPF>true</UseWPF>
         <Version>1.0.1.2</Version>
         <OutputType>WinExe</OutputType>
         <LangVersion>Latest</LangVersion>
-        <TargetFramework>net48</TargetFramework>
         <ApplicationIcon>logo.ico</ApplicationIcon>
+        <TargetFramework>net9.0-windows</TargetFramework>
         <AssemblyName>ChmlFrp - Advanced Toolkit 2</AssemblyName>
-        <Copyright>Copyright © 2025 Qusay Diaz. All rights reserved.</Copyright>
+        <Copyright>© 2025 cat2.chmlfrp.com | Qusay Diaz</Copyright>
     </PropertyGroup>
 
     <ItemGroup>

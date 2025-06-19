@@ -1,15 +1,20 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using ChmlFrp.SDK;
+using ChmlFrp.SDK.API;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
 using Wpf.Ui.Appearance;
+using Wpf.Ui.Controls;
+using static CAT2.Model;
 using static Wpf.Ui.Appearance.ApplicationThemeManager;
 
 namespace CAT2.ViewModels;
@@ -92,17 +97,17 @@ public partial class LoginPageViewModel : ObservableObject
 
 public partial class UserinfoPageViewModel : ObservableObject
 {
-    private readonly string _tempUserImage = Path.GetTempFileName();
-    [ObservableProperty] private string _bandwidth;
-    [ObservableProperty] private Visibility _cardVisibility;
-    [ObservableProperty] private BitmapImage _currentImage;
+    [ObservableProperty] private string _name;
     [ObservableProperty] private string _email;
     [ObservableProperty] private string _group;
-    [ObservableProperty] private string _integral;
-    [ObservableProperty] private string _name;
     [ObservableProperty] private string _regtime;
-    [ObservableProperty] private Visibility _ringVisibility;
+    [ObservableProperty] private string _integral;
+    [ObservableProperty] private string _bandwidth;
     [ObservableProperty] private string _tunnelCount;
+    [ObservableProperty] private Visibility _ringVisibility;
+    [ObservableProperty] private Visibility _cardVisibility;
+    [ObservableProperty] private BitmapImage _currentImage;
+
 
     public UserinfoPageViewModel()
     {
@@ -129,14 +134,17 @@ public partial class UserinfoPageViewModel : ObservableObject
             return;
         }
 
-        if (await Http.GetFile(userInfo.userimg, _tempUserImage))
+        var tempUserImage = Path.GetTempFileName();
+        if (await Http.GetFile(userInfo.userimg, tempUserImage))
         {
             CurrentImage = new BitmapImage();
             CurrentImage.BeginInit();
             CurrentImage.CacheOption = BitmapCacheOption.OnLoad;
-            CurrentImage.UriSource = new Uri(_tempUserImage);
+            CurrentImage.UriSource = new Uri(tempUserImage);
             CurrentImage.EndInit();
         }
+
+        File.Delete(tempUserImage);
 
         Name = userInfo.username;
         Email = userInfo.email;
@@ -151,7 +159,7 @@ public partial class UserinfoPageViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task OnSignOut()
+    private static async Task OnSignOut()
     {
         Sign.Signout();
         ShowTip(
@@ -328,7 +336,6 @@ public partial class SettingPageViewModel : ObservableObject
 {
     [ObservableProperty] private string _version = Model.Version;
     [ObservableProperty] private string _assemblyName = Model.AssemblyName;
-    [ObservableProperty] private string _copyright = Model.Copyright;
 }
 
 public partial class MainWindowViewModel : ObservableObject
@@ -374,13 +381,13 @@ public partial class MainWindowViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private void MinimizeThis()
+    private static void MinimizeThis()
     {
         MainClass.WindowState = WindowState.Minimized;
     }
 
     [RelayCommand]
-    private void CloseThis()
+    private static void CloseThis()
     {
         MainClass.Close();
     }

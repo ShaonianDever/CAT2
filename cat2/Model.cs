@@ -1,21 +1,23 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
-using System.Windows.Controls;
+using System.Windows;
 using CAT2.Views;
+using ChmlFrp.SDK.API;
+using Wpf.Ui.Controls;
 
 namespace CAT2;
 
 public abstract class Model
 {
     public static readonly MainWindow MainClass = (MainWindow)Application.Current.MainWindow;
-    public static readonly string Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-    public static readonly string AssemblyName = Assembly.GetExecutingAssembly().GetName().Name;
 
-    public static readonly string Copyright =
-        FileVersionInfo.GetVersionInfo(Assembly.GetEntryAssembly()!.Location).LegalCopyright;
+    private static readonly AssemblyName AppInfo = Assembly.GetExecutingAssembly().GetName();
+    public static readonly string Version = AppInfo.Version?.ToString();
+    public static readonly string AssemblyName = AppInfo.Name;
 
     public static async void ShowTip(string title, string content, ControlAppearance appearance, SymbolRegular icon)
     {

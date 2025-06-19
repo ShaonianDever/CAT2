@@ -31,7 +31,7 @@
                             Icon="{ui:SymbolIcon Password16}" />
 
             <Grid Margin="0,20,0,0">
-                <ui:Button ToolTip="快点a！"
+                <ui:Button ToolTip="到底有没有账号a！"
                            HorizontalAlignment="Left"
                            VerticalAlignment="Bottom"
                            Padding="12,8,12,8"
