@@ -8,52 +8,85 @@
         <viewModels:TunnelPageViewModel />
     </Page.DataContext>
 
+    <Page.Resources>
+        <DataTemplate x:Key="ListViewItemTemplate">
+            <ui:Card>
+                <Grid>
+                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Left"
+                                Orientation="Horizontal">
+                        <ui:TextBlock FontSize="18"
+                                      FontWeight="Bold"
+                                      Text="{Binding Name}" />
+
+                        <ui:TextBlock FontSize="14"
+                                      Foreground="Gray"
+                                      Text="{Binding Id}" />
+
+                        <ui:TextBlock FontSize="16"
+                                      Margin="10,0,0,0"
+                                      Text="{Binding Info}" />
+                    </StackPanel>
+
+                    <ui:ToggleSwitch HorizontalAlignment="Right"
+                                     VerticalAlignment="Top"
+                                     Margin="0,0,15,0"
+                                     Tag="{Binding Name}"
+                                     IsChecked="{Binding IsTunnelStarted}"
+                                     Command="{Binding TunnelCommand}"
+                                     IsEnabled="{Binding IsEnabled}"
+                                     OffContent="启动"
+                                     OnContent="关闭" />
+                </Grid>
+            </ui:Card>
+        </DataTemplate>
+    </Page.Resources>
+
     <Grid>
-        <ui:ProgressRing Visibility="{Binding RingVisibility}" IsIndeterminate="True" />
+        <TabControl>
+            <TabItem IsSelected="True">
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <ui:SymbolIcon Margin="0,0,6,0" Symbol="TagMultiple24" />
+                        <TextBlock Text="全部" />
+                    </StackPanel>
+                </TabItem.Header>
 
-        <ui:Card Visibility="{Binding CardVisibility}" Margin="35,35,35,15">
-            <StackPanel Orientation="Vertical">
-                <Label Margin="5" FontWeight="Bold" Content="隧道列表" />
+                <ui:ListView Margin="0,10,0,10"
+                             Visibility="{Binding CardVisibility}"
+                             ItemsSource="{Binding ListDataContext,Mode=TwoWay}"
+                             ItemTemplate="{StaticResource ListViewItemTemplate}" />
 
-                <ScrollViewer MaxHeight="450"
-                              VerticalScrollBarVisibility="Auto"
-                              HorizontalScrollBarVisibility="Disabled">
-                    <ui:ListView ItemsSource="{Binding ListDataContext,Mode=TwoWay}">
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <ui:Card>
-                                    <Grid>
-                                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Left"
-                                                    Orientation="Horizontal">
-                                            <ui:TextBlock FontSize="18"
-                                                          FontWeight="Bold"
-                                                          Text="{Binding Name}" />
+            </TabItem>
 
-                                            <ui:TextBlock FontSize="14"
-                                                          Foreground="Gray"
-                                                          Text="{Binding Id}" />
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <ui:SymbolIcon Margin="0,0,6,0" Symbol="TagLock24" />
+                        <TextBlock Text="VIP" />
+                    </StackPanel>
+                </TabItem.Header>
 
-                                            <ui:TextBlock FontSize="16"
-                                                          Margin="10,0,0,0"
-                                                          Text="{Binding Info}" />
+                <ui:ListView Margin="0,10,0,10"
+                             Visibility="{Binding CardVisibility}"
+                             ItemsSource="{Binding Viplist,Mode=TwoWay}"
+                             ItemTemplate="{StaticResource ListViewItemTemplate}" />
+            </TabItem>
 
-                                        </StackPanel>
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <ui:SymbolIcon Margin="0,0,6,0" Symbol="TagError24" />
+                        <TextBlock Text="掉线" />
+                    </StackPanel>
+                </TabItem.Header>
 
-                                        <ui:ToggleSwitch HorizontalAlignment="Right"
-                                                         VerticalAlignment="Top"
-                                                         Margin="0,0,15,0"
-                                                         Tag="{Binding Name}"
-                                                         IsChecked="{Binding IsTunnelStarted}"
-                                                         Command="{Binding TunnelCommand}"
-                                                         OffContent="启动"
-                                                         OnContent="关闭" />
-                                    </Grid>
-                                </ui:Card>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ui:ListView>
-                </ScrollViewer>
-            </StackPanel>
-        </ui:Card>
+                <ui:ListView Margin="0,10,0,10"
+                             Visibility="{Binding CardVisibility}"
+                             ItemsSource="{Binding Offlinelist,Mode=TwoWay}"
+                             ItemTemplate="{StaticResource ListViewItemTemplate}" />
+            </TabItem>
+        </TabControl>
+
+        <ui:ProgressRing IsIndeterminate="True" Visibility="{Binding RingVisibility,Mode=TwoWay}" />
     </Grid>
 </Page>

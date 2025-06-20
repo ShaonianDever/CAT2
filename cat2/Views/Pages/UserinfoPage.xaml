@@ -33,16 +33,30 @@
                 <TextBlock Text="{Binding Group,Mode=TwoWay}" />
                 <TextBlock Text="{Binding Regtime,Mode=TwoWay}" />
                 <TextBlock Text="{Binding Bandwidth,Mode=TwoWay}" />
-                <ui:Button HorizontalAlignment="Center"
-                           Margin="0,10,0,0"
-                           Content="右键退出登录"
-                           Icon="{ui:SymbolIcon SignOut24}">
-                    <ui:Button.ContextMenu>
-                        <ContextMenu>
-                            <MenuItem ToolTip="还在犹豫什么？快来退出登录吧！" Command="{Binding SignOutCommand}" Header="确定要退出登录吗?" />
-                        </ContextMenu>
-                    </ui:Button.ContextMenu>
-                </ui:Button>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <ui:Flyout
+                        IsOpen="{Binding IsFlyoutOpen, Mode=TwoWay}"
+                        Placement="Top">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock HorizontalAlignment="Left"
+                                       Text="你下好退出的决心了吗？"
+                                       TextWrapping="WrapWithOverflow" />
+                            <Button Command="{Binding SignOutCommand}" Margin="0,8,10,0" Content="确定" />
+                        </StackPanel>
+                    </ui:Flyout>
+
+                    <ui:Button Grid.Row="1"
+                               HorizontalAlignment="Center"
+                               Command="{Binding ButtonClickCommand}"
+                               CommandParameter="{Binding RelativeSource={RelativeSource Self}, Mode=OneWay}"
+                               ToolTip="怎么不退出了？"
+                               Icon="{ui:SymbolIcon SignOut24}"
+                               Content="退出登录" />
+                </Grid>
             </StackPanel>
         </ui:Card>
     </Grid>
