@@ -85,12 +85,21 @@ public partial class TunnelPageViewModel : ObservableObject
     [RelayCommand]
     private async Task CreateTunnel()
     {
+        if (NodeName == null || string.IsNullOrEmpty(LocalPort) || string.IsNullOrEmpty(RemotePort))
+        {
+            Model.ShowTip("输入错误",
+                "请确保所有字段都已填写。",
+                ControlAppearance.Danger,
+                SymbolRegular.Warning24);
+            return;
+        }
+
         const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         var random = new Random();
         var result = new char[8];
         for (var i = 0; i < 8; i++)
             result[i] = chars[random.Next(chars.Length)];
-        var tunnelName = result.ToString();
+        var tunnelName = new string(result);
 
         var msg = await Tunnel.CreateTunnel(tunnelName, NodeName.Name, TunnelType, LocalPort, RemotePort);
 
