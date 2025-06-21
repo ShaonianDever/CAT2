@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using ChmlFrp.SDK.API;
@@ -22,30 +21,25 @@ public partial class UserinfoPageViewModel : ObservableObject
     [ObservableProperty] private string _integral;
     [ObservableProperty] private string _bandwidth;
     [ObservableProperty] private string _tunnelCount;
-    [ObservableProperty] private Visibility _ringVisibility;
-    [ObservableProperty] private Visibility _cardVisibility;
-    [ObservableProperty] private BitmapImage _currentImage;
     [ObservableProperty] private bool _isFlyoutOpen;
+    [ObservableProperty] private BitmapImage _currentImage;
 
     public UserinfoPageViewModel()
     {
-        var timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(30) };
+        Loading(null, null);
+        var timer = new DispatcherTimer { Interval = TimeSpan.FromMinutes(1) };
         timer.Tick += Loading;
         timer.Start();
-        Loading(null, null);
     }
 
     [RelayCommand]
-    private void ButtonClick()
+    private void OpenFlyout()
     {
         IsFlyoutOpen = true;
     }
 
     private async void Loading(object sender, EventArgs e)
     {
-        RingVisibility = Visibility.Visible;
-        CardVisibility = Visibility.Collapsed;
-
         var userInfo = await User.GetUserInfo();
         if (userInfo == null)
         {
@@ -54,9 +48,16 @@ public partial class UserinfoPageViewModel : ObservableObject
                 "请检查网络连接或稍后重试。",
                 ControlAppearance.Danger,
                 SymbolRegular.TagError24);
-            RingVisibility = Visibility.Collapsed;
             return;
         }
+
+        Name = userInfo.username;
+        Email = userInfo.email;
+        Group = $"用户组：{userInfo.usergroup}";
+        Integral = $"积分：{userInfo.integral}";
+        Regtime = $"注册时间：{userInfo.regtime}";
+        TunnelCount = $"隧道使用：{userInfo.tunnelCount}/{userInfo.tunnel}";
+        Bandwidth = $"带宽限制：国内{userInfo.bandwidth}m | 国外{userInfo.bandwidth * 4}m";
 
         var tempUserImage = Path.GetTempFileName();
         if (await Http.GetFile(userInfo.userimg, tempUserImage))
@@ -69,17 +70,6 @@ public partial class UserinfoPageViewModel : ObservableObject
         }
 
         File.Delete(tempUserImage);
-
-        Name = userInfo.username;
-        Email = userInfo.email;
-        Group = $"用户组：{userInfo.usergroup}";
-        Integral = $"积分：{userInfo.integral}";
-        Regtime = $"注册时间：{userInfo.regtime}";
-        TunnelCount = $"隧道使用：{userInfo.tunnelCount}/{userInfo.tunnel}";
-        Bandwidth = $"带宽限制：国内{userInfo.bandwidth}m | 国外{userInfo.bandwidth * 4}m";
-
-        RingVisibility = Visibility.Collapsed;
-        CardVisibility = Visibility.Visible;
     }
 
     [RelayCommand]

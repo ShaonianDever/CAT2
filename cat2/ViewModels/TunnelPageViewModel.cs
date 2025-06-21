@@ -12,33 +12,32 @@ namespace CAT2.ViewModels;
 
 public partial class TunnelPageViewModel : ObservableObject
 {
-    [ObservableProperty] private ObservableCollection<Person> _listDataContext;
-    [ObservableProperty] private ObservableCollection<Person> _viplist;
-    [ObservableProperty] private ObservableCollection<Person> _offlinelist;
-    [ObservableProperty] private Visibility _ringVisibility;
-    [ObservableProperty] private Visibility _cardVisibility;
+    [ObservableProperty] private ObservableCollection<TunnelItem> _listDataContext;
+    [ObservableProperty] private ObservableCollection<TunnelItem> _viplist;
+    [ObservableProperty] private ObservableCollection<TunnelItem> _offlinelist;
+    [ObservableProperty] private ObservableCollection<NodeItem> _nodeDataContext;
+    [ObservableProperty] private NodeItem _nodeName;
+    [ObservableProperty] private string _tunnelType;
+    [ObservableProperty] private string _localPort;
+    [ObservableProperty] private string _remotePort;
+    [ObservableProperty] private bool _isSelected;
 
     public TunnelPageViewModel()
     {
-        var timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(30) };
-        timer.Tick += Timer_Tick;
+        Loading(null, null);
+        var timer = new DispatcherTimer { Interval = TimeSpan.FromMinutes(1) };
+        timer.Tick += Loading;
         timer.Start();
-        Timer_Tick(null, null);
     }
 
-    private void Timer_Tick(object sender, EventArgs e)
+    private async void Loading(object sender, EventArgs e)
     {
-        _ = Loading();
-    }
+        ListDataContext = [];
+        Offlinelist = [];
+        Viplist = [];
 
-    [RelayCommand]
-    private async Task Loading()
-    {
-        RingVisibility = Visibility.Visible;
-        CardVisibility = Visibility.Collapsed;
-
-        var tunnelNames = await Tunnel.GetTunnelNames();
-        if (tunnelNames == null)
+        var tunnelsData = await Tunnel.GetTunnelsData();
+        if (tunnelsData == null)
         {
             Model.ShowTip(
                 "加载隧道信息失败",
@@ -46,144 +45,223 @@ public partial class TunnelPageViewModel : ObservableObject
                 ControlAppearance.Danger,
                 SymbolRegular.TagError24);
         }
+        else if (tunnelsData.Count == 0)
+        {
+            Model.ShowTip(
+                "没有隧道信息",
+                "当前没有可用的隧道信息，请注册隧道。",
+                ControlAppearance.Danger,
+                SymbolRegular.Warning24);
+            IsSelected = true;
+        }
         else
         {
-            ListDataContext = [];
-            Viplist = [];
-
-            foreach (var tunnelName in tunnelNames)
+            foreach (var tunnelData in tunnelsData)
             {
-                var tunnelInfo = await Tunnel.GetTunnelData(tunnelName);
-
-                var person = new Person
+                var person = new TunnelItem(this)
                 {
-                    Name = tunnelName,
-                    Id = $"#{tunnelInfo.id}",
-                    IsTunnelStarted = await ChmlFrp.SDK.Services.Tunnel.IsTunnelRunning(tunnelInfo.name),
-                    Info = $"{tunnelInfo.node}-{tunnelInfo.nport}-{tunnelInfo.type}"
+                    Name = tunnelData.name,
+                    Id = $"#{tunnelData.id}",
+                    IsTunnelStarted = await ChmlFrp.SDK.Services.Tunnel.IsTunnelRunning(tunnelData.name),
+                    Info = $"{tunnelData.node}-{tunnelData.nport}-{tunnelData.type}",
+                    Url = $"{tunnelData.ip}:{tunnelData.dorp}"
                 };
                 ListDataContext.Add(person);
-                if (tunnelInfo.ip.Contains("vip")) Viplist.Add(person);
-                if (tunnelInfo.nodestate != "online") Offlinelist.Add(person);
+                if (tunnelData.ip.Contains("vip")) Viplist.Add(person);
+                if (tunnelData.nodestate != "online") Offlinelist.Add(person);
             }
         }
 
-        RingVisibility = Visibility.Collapsed;
-        CardVisibility = Visibility.Visible;
+        NodeDataContext = [];
+        foreach (var nodeData in await Node.GetNodeData())
+            NodeDataContext.Add(new NodeItem
+            {
+                Name = nodeData.name,
+                Content = $"{nodeData.name} ({nodeData.nodegroup})",
+                Notes = nodeData.notes
+            });
     }
 
-    public partial class Person : ObservableObject
+    [RelayCommand]
+    private async Task CreateTunnel()
     {
-        [ObservableProperty] private string _name;
-        [ObservableProperty] private string _id;
-        [ObservableProperty] private string _info;
-        [ObservableProperty] private bool _isTunnelStarted;
-        [ObservableProperty] private bool _isEnabled = true;
+        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        var random = new Random();
+        var result = new char[8];
+        for (var i = 0; i < 8; i++)
+            result[i] = chars[random.Next(chars.Length)];
+        var tunnelName = result.ToString();
 
-        [RelayCommand]
-        private void Tunnel()
+        var msg = await Tunnel.CreateTunnel(tunnelName, NodeName.Name, TunnelType, LocalPort, RemotePort);
+
+        switch (msg)
         {
-            IsEnabled = false;
-            if (IsTunnelStarted)
+            case null:
+                Model.ShowTip("隧道创建失败",
+                    "请检查网络连接或稍后重试。",
+                    ControlAppearance.Danger,
+                    SymbolRegular.TagError24);
+                return;
+            case "创建成功":
+                Model.ShowTip("隧道创建成功",
+                    $"隧道 {tunnelName} 已成功创建，请稍后查看。",
+                    ControlAppearance.Success,
+                    SymbolRegular.Checkmark24);
+                Loading(null, null);
+                return;
+            default:
+                Model.ShowTip("隧道创建失败",
+                    msg,
+                    ControlAppearance.Danger,
+                    SymbolRegular.TagError24);
+                break;
+        }
+    }
+}
+
+public partial class NodeItem : ObservableObject
+{
+    [ObservableProperty] private string _name;
+    [ObservableProperty] private string _content;
+    [ObservableProperty] private string _notes;
+}
+
+public partial class TunnelItem(TunnelPageViewModel parentViewModel) : ObservableObject
+{
+    [ObservableProperty] private string _name;
+    [ObservableProperty] private string _id;
+    [ObservableProperty] private string _info;
+    [ObservableProperty] private bool _isTunnelStarted;
+    [ObservableProperty] private bool _isFlyoutOpen;
+    [ObservableProperty] private bool _isEnabled = true;
+    public string Url;
+
+    [RelayCommand]
+    private void Tunnel()
+    {
+        IsEnabled = false;
+        if (IsTunnelStarted)
+        {
+            ChmlFrp.SDK.Services.Tunnel.StartTunnel(Name, StartTrueHandler, StartFalseHandler, IniUnKnown,
+                FrpcNotExists, TunnelRunning);
+
+            void TunnelRunning()
             {
-                ChmlFrp.SDK.Services.Tunnel.StartTunnel(Name, StartTrueHandler, StartFalseHandler, IniUnKnown,
-                    FrpcNotExists, TunnelRunning);
-
-                void TunnelRunning()
+                Application.Current.Dispatcher.Invoke(() =>
                 {
-                    Application.Current.Dispatcher.Invoke(() =>
-                    {
-                        Model.ShowTip(
-                            "隧道已在运行",
-                            $"隧道 {Name} 已在运行中。",
-                            ControlAppearance.Danger,
-                            SymbolRegular.Warning24);
-                        IsEnabled = true;
-                    });
-                }
-
-                void FrpcNotExists()
-                {
-                    Application.Current.Dispatcher.Invoke(() =>
-                    {
-                        Model.ShowTip(
-                            "FRPC 暂未安装",
-                            "请等待一会，或重新启动。（软件会自动安装）",
-                            ControlAppearance.Danger,
-                            SymbolRegular.TagError24);
-                        IsTunnelStarted = false;
-                        IsEnabled = true;
-                    });
-                }
-
-                void IniUnKnown()
-                {
-                    Application.Current.Dispatcher.Invoke(() =>
-                    {
-                        Model.ShowTip(
-                            "隧道启动数据获取失败",
-                            "请检查网络状态，或查看API状态。",
-                            ControlAppearance.Danger,
-                            SymbolRegular.TagError24);
-                        IsTunnelStarted = false;
-                        IsEnabled = true;
-                    });
-                }
-
-                void StartFalseHandler()
-                {
-                    Application.Current.Dispatcher.Invoke(() =>
-                    {
-                        Model.ShowTip(
-                            "隧道启动失败",
-                            $"隧道 {Name} 启动失败，具体请看日志。",
-                            ControlAppearance.Danger,
-                            SymbolRegular.TagError24);
-                        IsTunnelStarted = false;
-                        IsEnabled = true;
-                    });
-                }
-
-                void StartTrueHandler()
-                {
-                    Application.Current.Dispatcher.Invoke(() =>
-                    {
-                        Model.ShowTip("隧道启动成功",
-                            $"隧道 {Name} 已成功启动。",
-                            ControlAppearance.Success,
-                            SymbolRegular.Checkmark24);
-                        IsEnabled = true;
-                    });
-                }
+                    Model.ShowTip(
+                        "隧道已在运行",
+                        $"隧道 {Name} 已在运行中。",
+                        ControlAppearance.Danger,
+                        SymbolRegular.Warning24);
+                    IsEnabled = true;
+                });
             }
-            else
+
+            void FrpcNotExists()
             {
-                ChmlFrp.SDK.Services.Tunnel.StopTunnel(Name, StopTrueHandler, StopFalseHandler);
-
-                void StopTrueHandler()
+                Application.Current.Dispatcher.Invoke(() =>
                 {
-                    Application.Current.Dispatcher.Invoke(() =>
-                    {
-                        Model.ShowTip("隧道关闭成功",
-                            $"隧道 {Name} 已成功关闭。",
-                            ControlAppearance.Success,
-                            SymbolRegular.Checkmark24);
-                        IsEnabled = true;
-                    });
-                }
+                    Model.ShowTip(
+                        "FRPC 暂未安装",
+                        "请等待一会，或重新启动。（软件会自动安装）",
+                        ControlAppearance.Danger,
+                        SymbolRegular.TagError24);
+                    IsTunnelStarted = false;
+                    IsEnabled = true;
+                });
+            }
 
-                void StopFalseHandler()
+            void IniUnKnown()
+            {
+                Application.Current.Dispatcher.Invoke(() =>
                 {
-                    Application.Current.Dispatcher.Invoke(() =>
-                    {
-                        Model.ShowTip("隧道关闭失败",
-                            $"隧道 {Name} 已退出。",
-                            ControlAppearance.Danger,
-                            SymbolRegular.TagError24);
-                        IsEnabled = true;
-                    });
-                }
+                    Model.ShowTip(
+                        "隧道启动数据获取失败",
+                        "请检查网络状态，或查看API状态。",
+                        ControlAppearance.Danger,
+                        SymbolRegular.TagError24);
+                    IsTunnelStarted = false;
+                    IsEnabled = true;
+                });
+            }
+
+            void StartFalseHandler()
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    Model.ShowTip(
+                        "隧道启动失败",
+                        $"隧道 {Name} 启动失败，具体请看日志。",
+                        ControlAppearance.Danger,
+                        SymbolRegular.TagError24);
+                    IsTunnelStarted = false;
+                    IsEnabled = true;
+                });
+            }
+
+            void StartTrueHandler()
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    Model.ShowTip("隧道启动成功",
+                        $"隧道 {Name} 已成功启动，链接已复制到剪切板。",
+                        ControlAppearance.Success,
+                        SymbolRegular.Checkmark24);
+                    IsEnabled = true;
+                    Clipboard.SetDataObject(Url);
+                });
             }
         }
+        else
+        {
+            ChmlFrp.SDK.Services.Tunnel.StopTunnel(Name, StopTrueHandler, StopFalseHandler);
+
+            void StopTrueHandler()
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    Model.ShowTip("隧道关闭成功",
+                        $"隧道 {Name} 已成功关闭。",
+                        ControlAppearance.Success,
+                        SymbolRegular.Checkmark24);
+                    IsEnabled = true;
+                });
+            }
+
+            void StopFalseHandler()
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    Model.ShowTip("隧道关闭失败",
+                        $"隧道 {Name} 已退出。",
+                        ControlAppearance.Danger,
+                        SymbolRegular.TagError24);
+                    IsEnabled = true;
+                });
+            }
+        }
+    }
+
+
+    [RelayCommand]
+    private void DeleteTunnel()
+    {
+        ChmlFrp.SDK.API.Tunnel.DeleteTunnel(Name);
+
+        Model.ShowTip("隧道删除成功",
+            $"隧道 {Name} 已成功删除。",
+            ControlAppearance.Success,
+            SymbolRegular.Checkmark24);
+
+        parentViewModel.ListDataContext.Remove(this);
+        parentViewModel.Offlinelist.Remove(this);
+        parentViewModel.Viplist.Remove(this);
+    }
+
+    [RelayCommand]
+    private void OpenFlyout()
+    {
+        IsFlyoutOpen = true;
     }
 }

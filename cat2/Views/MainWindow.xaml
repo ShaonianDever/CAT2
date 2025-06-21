@@ -56,7 +56,6 @@
             <ui:NavigationView.MenuItems>
                 <ui:NavigationViewItem Content="登录"
                                        x:Name="LoginItem"
-                                       NavigationCacheMode="Enabled"
                                        Icon="{ui:SymbolIcon NoteAdd24}"
                                        TargetPageType="{x:Type pages:LoginPage}" />
 
@@ -77,7 +76,6 @@
 
             <ui:NavigationView.FooterMenuItems>
                 <ui:NavigationViewItem Content="设置"
-                                       NavigationCacheMode="Enabled"
                                        Icon="{ui:SymbolIcon Settings24}"
                                        TargetPageType="{x:Type pages:SettingPage}" />
             </ui:NavigationView.FooterMenuItems>
