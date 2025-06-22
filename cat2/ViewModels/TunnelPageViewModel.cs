@@ -3,19 +3,28 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
-using ChmlFrp.SDK.API;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 using Wpf.Ui.Controls;
 
 namespace CAT2.ViewModels;
 
 public partial class TunnelPageViewModel : ObservableObject
 {
+    [ObservableProperty] private Visibility _isNumberBoxVisibility;
+    [ObservableProperty] private bool _isSelected;
+
+    [ObservableProperty] private Visibility _isTextBoxVisibility;
+
     // 隧道列表
     [ObservableProperty] private ObservableCollection<TunnelItem> _listDataContext;
-    [ObservableProperty] private ObservableCollection<TunnelItem> _viplist;
+    [ObservableProperty] private string _localPort;
+
+    // 创建隧道
+    [ObservableProperty] private ObservableCollection<NodeItem> _nodeDataContext;
+    [ObservableProperty] private NodeItem _nodeName;
     [ObservableProperty] private ObservableCollection<TunnelItem> _offlinelist;
+    [ObservableProperty] private string _remotePort;
+    [ObservableProperty] private string _tunnelType;
+    [ObservableProperty] private ObservableCollection<TunnelItem> _viplist;
 
     public TunnelPageViewModel()
     {
@@ -84,16 +93,6 @@ public partial class TunnelPageViewModel : ObservableObject
         }
     }
 
-    // 创建隧道
-    [ObservableProperty] private ObservableCollection<NodeItem> _nodeDataContext;
-    [ObservableProperty] private NodeItem _nodeName;
-    [ObservableProperty] private string _tunnelType;
-    [ObservableProperty] private string _localPort;
-    [ObservableProperty] private string _remotePort;
-    [ObservableProperty] private bool _isSelected;
-    [ObservableProperty] private Visibility _isNumberBoxVisibility;
-    [ObservableProperty] private Visibility _isTextBoxVisibility;
-
     partial void OnTunnelTypeChanged(string value)
     {
         if (value is "http" or "https")
@@ -120,48 +119,42 @@ public partial class TunnelPageViewModel : ObservableObject
             return;
         }
 
-        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        var random = new Random();
-        var result = new char[8];
-        for (var i = 0; i < 8; i++)
-            result[i] = chars[random.Next(chars.Length)];
-        var tunnelName = new string(result);
+        var msg = await Tunnel.CreateTunnel(NodeName.Name, TunnelType, LocalPort, RemotePort);
 
-        var msg = await Tunnel.CreateTunnel(tunnelName, NodeName.Name, TunnelType, LocalPort, RemotePort);
-
-        switch (msg)
+        if (msg == null)
         {
-            case null:
-                Model.ShowTip("隧道创建失败",
-                    "请检查网络连接或稍后重试。",
-                    ControlAppearance.Danger,
-                    SymbolRegular.TagError24);
-                return;
-            case "创建成功":
-                Model.ShowTip("隧道创建成功",
-                    $"隧道 {tunnelName} 已成功创建，请稍后查看。",
-                    ControlAppearance.Success,
-                    SymbolRegular.Checkmark24);
-                Loading(null, null);
-                return;
-            default:
-                Model.ShowTip("隧道创建失败",
-                    msg,
-                    ControlAppearance.Danger,
-                    SymbolRegular.TagError24);
-                break;
+            Model.ShowTip("隧道创建失败",
+                "请检查网络连接或稍后重试。",
+                ControlAppearance.Danger,
+                SymbolRegular.TagError24);
+            return;
         }
+
+        if (msg.Contains("已成功创建"))
+        {
+            Model.ShowTip("隧道创建成功",
+                $"{msg}。",
+                ControlAppearance.Success,
+                SymbolRegular.Checkmark24);
+            Loading(null, null);
+            return;
+        }
+
+        Model.ShowTip("隧道创建失败",
+            msg,
+            ControlAppearance.Danger,
+            SymbolRegular.TagError24);
     }
 }
 
 public partial class TunnelItem(TunnelPageViewModel parentViewModel) : ObservableObject
 {
-    [ObservableProperty] private string _name;
     [ObservableProperty] private string _id;
     [ObservableProperty] private string _info;
-    [ObservableProperty] private bool _isTunnelStarted;
-    [ObservableProperty] private bool _isFlyoutOpen;
     [ObservableProperty] private bool _isEnabled = true;
+    [ObservableProperty] private bool _isFlyoutOpen;
+    [ObservableProperty] private bool _isTunnelStarted;
+    [ObservableProperty] private string _name;
     public string Url;
 
     [RelayCommand]
@@ -296,7 +289,7 @@ public partial class TunnelItem(TunnelPageViewModel parentViewModel) : Observabl
 
 public partial class NodeItem : ObservableObject
 {
-    [ObservableProperty] private string _name;
     [ObservableProperty] private string _content;
+    [ObservableProperty] private string _name;
     [ObservableProperty] private string _notes;
 }

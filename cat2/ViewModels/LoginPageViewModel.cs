@@ -1,9 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows;
-using ChmlFrp.SDK.API;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 using Wpf.Ui.Controls;
 
 namespace CAT2.ViewModels;

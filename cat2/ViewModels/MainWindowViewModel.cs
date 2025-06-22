@@ -1,7 +1,4 @@
 ﻿using System.Windows;
-using ChmlFrp.SDK.API;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
 using Wpf.Ui.Appearance;
 
@@ -9,8 +6,8 @@ namespace CAT2.ViewModels;
 
 public partial class MainWindowViewModel : ObservableObject
 {
-    [ObservableProperty] private bool _isDarkTheme;
     [ObservableProperty] private string _assemblyName = Model.AssemblyName;
+    [ObservableProperty] private bool _isDarkTheme;
 
     public MainWindowViewModel()
     {

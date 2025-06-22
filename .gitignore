@@ -1,7 +1,6 @@
 # Running cache files
 *obj
 *bin
-*.xsd
 
 # Rider cache files
 *.idea

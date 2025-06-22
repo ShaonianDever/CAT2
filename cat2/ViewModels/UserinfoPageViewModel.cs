@@ -5,24 +5,21 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
-using ChmlFrp.SDK.API;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 using Wpf.Ui.Controls;
 
 namespace CAT2.ViewModels;
 
 public partial class UserinfoPageViewModel : ObservableObject
 {
-    [ObservableProperty] private string _name;
+    [ObservableProperty] private string _bandwidth;
+    [ObservableProperty] private BitmapImage _currentImage;
     [ObservableProperty] private string _email;
     [ObservableProperty] private string _group;
-    [ObservableProperty] private string _regtime;
     [ObservableProperty] private string _integral;
-    [ObservableProperty] private string _bandwidth;
-    [ObservableProperty] private string _tunnelCount;
     [ObservableProperty] private bool _isFlyoutOpen;
-    [ObservableProperty] private BitmapImage _currentImage;
+    [ObservableProperty] private string _name;
+    [ObservableProperty] private string _regtime;
+    [ObservableProperty] private string _tunnelCount;
 
     public UserinfoPageViewModel()
     {
