@@ -12,15 +12,10 @@ namespace CAT2.ViewModels;
 
 public partial class TunnelPageViewModel : ObservableObject
 {
+    // 隧道列表
     [ObservableProperty] private ObservableCollection<TunnelItem> _listDataContext;
     [ObservableProperty] private ObservableCollection<TunnelItem> _viplist;
     [ObservableProperty] private ObservableCollection<TunnelItem> _offlinelist;
-    [ObservableProperty] private ObservableCollection<NodeItem> _nodeDataContext;
-    [ObservableProperty] private NodeItem _nodeName;
-    [ObservableProperty] private string _tunnelType;
-    [ObservableProperty] private string _localPort;
-    [ObservableProperty] private string _remotePort;
-    [ObservableProperty] private bool _isSelected;
 
     public TunnelPageViewModel()
     {
@@ -72,14 +67,45 @@ public partial class TunnelPageViewModel : ObservableObject
             }
         }
 
+        // 节点数据
         NodeDataContext = [];
         foreach (var nodeData in await Node.GetNodeData())
+        {
+            nodeData.udp = nodeData.udp == "true" ? "允许UDP" : "不允许UDP";
+            nodeData.web = nodeData.web == "yes" ? "允许建站" : "不允许建站";
+            nodeData.nodegroup = nodeData.nodegroup == "vip" ? "VIP节点" : "免费节点";
+
             NodeDataContext.Add(new NodeItem
             {
                 Name = nodeData.name,
                 Content = $"{nodeData.name} ({nodeData.nodegroup})",
-                Notes = nodeData.notes
+                Notes = $"{nodeData.notes} {nodeData.udp} {nodeData.web}"
             });
+        }
+    }
+
+    // 创建隧道
+    [ObservableProperty] private ObservableCollection<NodeItem> _nodeDataContext;
+    [ObservableProperty] private NodeItem _nodeName;
+    [ObservableProperty] private string _tunnelType;
+    [ObservableProperty] private string _localPort;
+    [ObservableProperty] private string _remotePort;
+    [ObservableProperty] private bool _isSelected;
+    [ObservableProperty] private Visibility _isNumberBoxVisibility;
+    [ObservableProperty] private Visibility _isTextBoxVisibility;
+
+    partial void OnTunnelTypeChanged(string value)
+    {
+        if (value is "http" or "https")
+        {
+            IsNumberBoxVisibility = Visibility.Collapsed;
+            IsTextBoxVisibility = Visibility.Visible;
+        }
+        else
+        {
+            IsNumberBoxVisibility = Visibility.Visible;
+            IsTextBoxVisibility = Visibility.Collapsed;
+        }
     }
 
     [RelayCommand]
@@ -126,13 +152,6 @@ public partial class TunnelPageViewModel : ObservableObject
                 break;
         }
     }
-}
-
-public partial class NodeItem : ObservableObject
-{
-    [ObservableProperty] private string _name;
-    [ObservableProperty] private string _content;
-    [ObservableProperty] private string _notes;
 }
 
 public partial class TunnelItem(TunnelPageViewModel parentViewModel) : ObservableObject
@@ -273,4 +292,11 @@ public partial class TunnelItem(TunnelPageViewModel parentViewModel) : Observabl
     {
         IsFlyoutOpen = true;
     }
+}
+
+public partial class NodeItem : ObservableObject
+{
+    [ObservableProperty] private string _name;
+    [ObservableProperty] private string _content;
+    [ObservableProperty] private string _notes;
 }

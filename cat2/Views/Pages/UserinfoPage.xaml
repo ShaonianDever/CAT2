@@ -44,7 +44,7 @@
                        Command="{Binding OpenFlyoutCommand}"
                        CommandParameter="{Binding RelativeSource={RelativeSource Self}, Mode=OneWay}"
                        ToolTip="怎么不退出了？"
-                       Appearance="Danger"
+                       Appearance="Primary"
                        Icon="{ui:SymbolIcon SignOut24}"
                        Content="退出登录" />
         </StackPanel>
