@@ -1,167 +1,219 @@
-﻿<Page x:Class="CAT2.Views.Pages.TunnelPage"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-      xmlns:viewModels="clr-namespace:CAT2.ViewModels">
+﻿<Page
+    x:Class="CAT2.Views.Pages.TunnelPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:viewModels="clr-namespace:CAT2.ViewModels">
 
     <Page.DataContext>
         <viewModels:TunnelPageViewModel />
     </Page.DataContext>
 
     <Page.Resources>
-        <DataTemplate x:Key="ListViewItemTemplate">
+        <DataTemplate
+            x:Key="ListViewItemTemplate">
             <ui:CardExpander>
                 <ui:CardExpander.Header>
                     <Grid>
-                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Left"
-                                    Orientation="Horizontal">
-                            <ui:TextBlock FontSize="18"
-                                          FontWeight="Bold"
-                                          Text="{Binding Name}" />
+                        <StackPanel
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Left"
+                            Orientation="Horizontal">
+                            <ui:TextBlock
+                                FontSize="18"
+                                FontWeight="Bold"
+                                Text="{Binding Name}" />
 
-                            <ui:TextBlock FontSize="14"
-                                          Foreground="Gray"
-                                          Text="{Binding Id}" />
+                            <ui:TextBlock
+                                FontSize="14"
+                                Foreground="Gray"
+                                Text="{Binding Id}" />
 
-                            <ui:TextBlock FontSize="16"
-                                          Margin="10,0,0,0"
-                                          Text="{Binding Info}" />
+                            <ui:TextBlock
+                                FontSize="16"
+                                Margin="10,0,0,0"
+                                Text="{Binding Info}" />
                         </StackPanel>
 
-                        <ui:ToggleSwitch HorizontalAlignment="Right"
-                                         VerticalAlignment="Top"
-                                         Margin="0,0,15,0"
-                                         IsChecked="{Binding IsTunnelStarted,Mode=TwoWay}"
-                                         Command="{Binding TunnelCommand}"
-                                         IsEnabled="{Binding IsEnabled,Mode=TwoWay}"
-                                         OffContent="启动"
-                                         OnContent="关闭" />
+                        <ui:ToggleSwitch
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Top"
+                            Margin="0,0,15,0"
+                            IsChecked="{Binding IsTunnelStarted,Mode=TwoWay}"
+                            Command="{Binding TunnelCommand}"
+                            IsEnabled="{Binding IsEnabled,Mode=TwoWay}"
+                            OffContent="启动"
+                            OnContent="关闭" />
                     </Grid>
                 </ui:CardExpander.Header>
 
-                <StackPanel Orientation="Horizontal">
-                    <ui:Button Content="编辑隧道"
-                               Margin="10,0,0,0" />
+                <StackPanel
+                    Orientation="Horizontal">
+                    <ui:Button
+                        Content="编辑隧道"
+                        Margin="10,0,0,0" />
 
-                    <ui:Flyout Placement="Top"
-                               IsOpen="{Binding IsFlyoutOpen, Mode=TwoWay}">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock HorizontalAlignment="Left"
-                                       Text="你下好删除的决心了吗？"
-                                       TextWrapping="WrapWithOverflow" />
-                            <ui:Button Command="{Binding DeleteTunnelCommand}" Margin="0,8,10,0" Content="确定" />
+                    <ui:Flyout
+                        Placement="Top"
+                        IsOpen="{Binding IsFlyoutOpen, Mode=TwoWay}">
+                        <StackPanel
+                            Orientation="Horizontal">
+                            <TextBlock
+                                HorizontalAlignment="Left"
+                                Text="你下好删除的决心了吗？"
+                                TextWrapping="WrapWithOverflow" />
+
+                            <ui:Button
+                                ToolTip="没事再来一瓶🤓"
+                                Command="{Binding DeleteTunnelCommand}"
+                                Margin="0,10,10,0"
+                                Content="确定" />
                         </StackPanel>
                     </ui:Flyout>
 
-                    <ui:Button Command="{Binding OpenFlyoutCommand}"
-                               CommandParameter="{Binding RelativeSource={RelativeSource Self}, Mode=OneWay}"
-                               ToolTip="怎么不退出了？"
-                               Icon="{ui:SymbolIcon Delete48}"
-                               Appearance="Danger"
-                               Content="删除隧道" />
+                    <ui:Button
+                        Command="{Binding OpenFlyoutCommand}"
+                        ToolTip="怎么不退出了？"
+                        Icon="{ui:SymbolIcon Delete48}"
+                        Appearance="Danger"
+                        Content="删除隧道" />
                 </StackPanel>
             </ui:CardExpander>
         </DataTemplate>
     </Page.Resources>
 
-    <TabControl>
-        <TabItem IsSelected="True">
-            <TabItem.Header>
-                <StackPanel Orientation="Horizontal">
-                    <ui:SymbolIcon Margin="0,0,6,0" Symbol="TagMultiple24" />
-                    <TextBlock Text="全部" />
-                </StackPanel>
-            </TabItem.Header>
+    <Grid>
+        <TabControl>
+            <TabItem
+                IsSelected="True">
+                <TabItem.Header>
+                    <StackPanel
+                        Orientation="Horizontal">
+                        <ui:SymbolIcon
+                            Margin="0,0,6,0"
+                            Symbol="TagMultiple24" />
 
-            <ui:ListView Margin="0,10,0,10"
-                         ItemsSource="{Binding ListDataContext,Mode=TwoWay}"
-                         ItemTemplate="{StaticResource ListViewItemTemplate}" />
-        </TabItem>
+                        <TextBlock
+                            Text="全部" />
+                    </StackPanel>
+                </TabItem.Header>
 
-        <TabItem>
-            <TabItem.Header>
-                <StackPanel Orientation="Horizontal">
-                    <ui:SymbolIcon Margin="0,0,6,0" Symbol="TagLock24" />
-                    <TextBlock Text="VIP" />
-                </StackPanel>
-            </TabItem.Header>
+                <ui:ListView
+                    Margin="0,10,0,10"
+                    ItemsSource="{Binding ListDataContext,Mode=TwoWay}"
+                    ItemTemplate="{StaticResource ListViewItemTemplate}" />
+            </TabItem>
 
-            <ui:ListView Margin="0,10,0,10"
-                         ItemsSource="{Binding Viplist,Mode=TwoWay}"
-                         ItemTemplate="{StaticResource ListViewItemTemplate}" />
-        </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel
+                        Orientation="Horizontal">
+                        <ui:SymbolIcon
+                            Margin="0,0,6,0"
+                            Symbol="TagLock24" />
 
-        <TabItem>
-            <TabItem.Header>
-                <StackPanel Orientation="Horizontal">
-                    <ui:SymbolIcon Margin="0,0,6,0" Symbol="TagError24" />
-                    <TextBlock Text="掉线" />
-                </StackPanel>
-            </TabItem.Header>
+                        <TextBlock
+                            Text="VIP" />
+                    </StackPanel>
+                </TabItem.Header>
 
-            <ui:ListView Margin="0,10,0,10"
-                         ItemsSource="{Binding Offlinelist,Mode=TwoWay}"
-                         ItemTemplate="{StaticResource ListViewItemTemplate}" />
-        </TabItem>
+                <ui:ListView
+                    Margin="0,10,0,10"
+                    ItemsSource="{Binding Viplist,Mode=TwoWay}"
+                    ItemTemplate="{StaticResource ListViewItemTemplate}" />
+            </TabItem>
 
-        <TabItem IsSelected="{Binding IsSelected}">
-            <TabItem.Header>
-                <StackPanel Orientation="Horizontal">
-                    <ui:SymbolIcon Margin="0,0,6,0" Symbol="Add24" />
-                    <TextBlock Text="新建隧道" />
-                </StackPanel>
-            </TabItem.Header>
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel
+                        Orientation="Horizontal">
+                        <ui:SymbolIcon
+                            Margin="0,0,6,0" Symbol="TagError24" />
 
-            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Vertical">
+                        <TextBlock
+                            Text="掉线" />
+                    </StackPanel>
+                </TabItem.Header>
 
-                <StackPanel Margin="0,0,0,10" Orientation="Horizontal">
-                    <ComboBox ItemsSource="{Binding NodeDataContext,Mode=TwoWay}"
-                              SelectedValue="{Binding NodeName, Mode=TwoWay}"
-                              Margin="0,0,5,0"
-                              SelectedIndex="0">
+                <ui:ListView
+                    Margin="0,10,0,10"
+                    ItemsSource="{Binding Offlinelist,Mode=TwoWay}"
+                    ItemTemplate="{StaticResource ListViewItemTemplate}" />
+            </TabItem>
+        </TabControl>
+
+        <ui:Button
+            VerticalAlignment="Top"
+            HorizontalAlignment="Right"
+            Content="添加隧道"
+            Icon="{ui:SymbolIcon Add48}"
+            Padding="6"
+            Margin="0,2,15,0"
+            FontSize="16"
+            Command="{Binding ShowFlyoutCommand}" />
+
+        <ui:Flyout
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            IsOpen="{Binding IsCreateTunnelFlyoutOpen, Mode=TwoWay}"
+            Placement="Top">
+
+            <StackPanel
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center"
+                Orientation="Vertical">
+
+                <StackPanel
+                    Margin="0,0,0,10"
+                    Orientation="Horizontal">
+
+                    <ComboBox
+                        ItemsSource="{Binding NodeDataContext,Mode=TwoWay}"
+                        SelectedValue="{Binding NodeName, Mode=TwoWay}"
+                        Margin="0,0,5,0">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Content,Mode=TwoWay}"
-                                           ToolTip="{Binding Notes,Mode=TwoWay}" />
+                                <TextBlock
+                                    Text="{Binding Content,Mode=TwoWay}"
+                                    ToolTip="{Binding Notes,Mode=TwoWay}" />
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                     </ComboBox>
 
-                    <ComboBox Text="{Binding TunnelType}"
-                              SelectedIndex="0">
-                        <ComboBoxItem Content="tcp" />
-                        <ComboBoxItem Content="udp" />
-                        <ComboBoxItem Content="http" />
-                        <ComboBoxItem Content="https" />
+                    <ComboBox
+                        Text="{Binding TunnelType}"
+                        SelectedIndex="0">
+                        <ComboBoxItem
+                            Content="tcp" />
+                        <ComboBoxItem
+                            Content="udp" />
                     </ComboBox>
                 </StackPanel>
 
-                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                    <ui:NumberBox Text="{Binding LocalPort,Mode=TwoWay}"
-                                  PlaceholderText="内网端口"
-                                  Maximum="65535" Minimum="0"
-                                  Margin="0,0,5,0" />
+                <StackPanel
+                    Orientation="Horizontal"
+                    Margin="0,0,0,10">
+                    <ui:NumberBox
+                        Text="{Binding LocalPort,Mode=TwoWay}"
+                        PlaceholderText="内网端口"
+                        Maximum="65534" Minimum="1"
+                        Margin="0,0,5,0" />
 
-                    <Grid>
-                        <ui:NumberBox Visibility="{Binding IsNumberBoxVisibility,Mode=TwoWay}"
-                                      Text="{Binding RemotePort,Mode=TwoWay}"
-                                      Maximum="65535" Minimum="0"
-                                      PlaceholderText="外网端口" />
-
-                        <ui:TextBox Visibility="{Binding IsTextBoxVisibility,Mode=TwoWay}"
-                                    Text="{Binding RemotePort,Mode=TwoWay}"
-                                    PlaceholderText="自定义域名"
-                                    ToolTip="域名通过CNAME解析至此节点" />
-                    </Grid>
+                    <ui:NumberBox
+                        Visibility="{Binding IsNumberBoxVisibility,Mode=TwoWay}"
+                        Text="{Binding RemotePort,Mode=TwoWay}"
+                        Maximum="65534" Minimum="1"
+                        PlaceholderText="外网端口" />
                 </StackPanel>
 
-                <ui:Button Command="{Binding CreateTunnelCommand}"
-                           HorizontalAlignment="Right"
-                           Appearance="Primary"
-                           Icon="{ui:SymbolIcon Add48}"
-                           Content="添加隧道"
-                           Padding="8" />
+                <ui:Button
+                    Command="{Binding CreateTunnelCommand}"
+                    HorizontalAlignment="Right"
+                    Appearance="Primary"
+                    Icon="{ui:SymbolIcon Add48}"
+                    Content="添加隧道"
+                    Padding="8" />
             </StackPanel>
-        </TabItem>
-    </TabControl>
+        </ui:Flyout>
+    </Grid>
 </Page>

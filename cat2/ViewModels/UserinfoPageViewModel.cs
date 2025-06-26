@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Reflection;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using Wpf.Ui.Controls;
@@ -79,7 +79,8 @@ public partial class UserinfoPageViewModel : ObservableObject
             ControlAppearance.Info,
             SymbolRegular.SignOut24);
         await Task.Delay(1000);
-        Process.Start(Assembly.GetExecutingAssembly().Location);
-        Model.MainClass.Close();
+        Process.Start(Path.Combine(AppContext.BaseDirectory,
+            Path.GetFileName(Process.GetCurrentProcess().MainModule?.FileName)!));
+        Application.Current.Shutdown();
     }
 }

@@ -1,15 +1,16 @@
-﻿<ui:FluentWindow xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                 xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-                 xmlns:viewModels="clr-namespace:CAT2.ViewModels"
-                 x:Class="CAT2.Views.MainWindow" Topmost="True"
-                 xmlns:pages="clr-namespace:CAT2.Views.Pages"
-                 Title="{Binding AssemblyName}"
-                 ExtendsContentIntoTitleBar="True"
-                 MaxHeight="750" MaxWidth="1450"
-                 MinHeight="500" MinWidth="950"
-                 Height="550" Width="1050"
-                 WindowBackdropType="Mica">
+﻿<ui:FluentWindow
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:viewModels="clr-namespace:CAT2.ViewModels"
+    x:Class="CAT2.Views.MainWindow" Topmost="True"
+    xmlns:pages="clr-namespace:CAT2.Views.Pages"
+    Title="{Binding AssemblyName}"
+    ExtendsContentIntoTitleBar="True"
+    MaxHeight="750" MaxWidth="1450"
+    MinHeight="500" MinWidth="950"
+    Height="550" Width="1050"
+    WindowBackdropType="Mica">
 
     <ui:FluentWindow.DataContext>
         <viewModels:MainWindowViewModel />
@@ -17,70 +18,87 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
+            <RowDefinition
+                Height="Auto" />
+            <RowDefinition
+                Height="*" />
         </Grid.RowDefinitions>
 
-        <ui:TitleBar Title="{Binding AssemblyName}"
-                     CanMaximize="False" ShowMaximize="False"
-                     ShowMinimize="False" ShowClose="False">
+        <ui:TitleBar
+            Title="{Binding AssemblyName}"
+            CanMaximize="False" ShowMaximize="False"
+            ShowMinimize="False" ShowClose="False">
             <ui:TitleBar.Icon>
-                <ui:ImageIcon Source="pack://application:,,,/logo.ico" />
+                <ui:ImageIcon
+                    Source="pack://application:,,,/logo.ico" />
             </ui:TitleBar.Icon>
 
             <ui:TitleBar.TrailingContent>
-                <StackPanel Margin="0,5,5,0" VerticalAlignment="Top" Orientation="Horizontal">
-                    <ToggleButton Height="30" Width="45"
-                                  VerticalAlignment="Top"
-                                  IsChecked="{Binding IsDarkTheme,Mode=TwoWay}"
-                                  Command="{Binding ThemesChangedCommand}">
+                <StackPanel
+                    Margin="0,5,5,0"
+                    VerticalAlignment="Top"
+                    Orientation="Horizontal">
+                    <ToggleButton
+                        Height="30" Width="45"
+                        VerticalAlignment="Top"
+                        IsChecked="{Binding IsDarkTheme,Mode=TwoWay}"
+                        Command="{Binding ThemesChangedCommand}">
                         <ui:SymbolIcon Symbol="DarkTheme24" />
                     </ToggleButton>
 
-                    <ui:Button Height="30" Width="45"
-                               Margin="5,0,0,0"
-                               Command="{Binding MinimizeThisCommand}"
-                               Icon="{ui:SymbolIcon ArrowMinimize24}" />
+                    <ui:Button
+                        Height="30" Width="45"
+                        Margin="5,0,0,0"
+                        Command="{Binding MinimizeThisCommand}"
+                        Icon="{ui:SymbolIcon ArrowMinimize24}" />
 
-                    <ui:Button Height="30" Width="45"
-                               Margin="5,0,0,0"
-                               Command="{Binding CloseThisCommand}"
-                               Icon="{ui:SymbolIcon ArrowExit20}" />
+                    <ui:Button
+                        Height="30" Width="45"
+                        Margin="5,0,0,0"
+                        Command="{Binding CloseThisCommand}"
+                        Icon="{ui:SymbolIcon ArrowExit20}" />
                 </StackPanel>
             </ui:TitleBar.TrailingContent>
         </ui:TitleBar>
 
-        <ui:NavigationView IsBackButtonVisible="Collapsed"
-                           x:Name="RootNavigation"
-                           Grid.Row="1">
+        <ui:NavigationView
+            IsBackButtonVisible="Collapsed"
+            x:Name="RootNavigation"
+            Grid.Row="1">
             <ui:NavigationView.MenuItems>
-                <ui:NavigationViewItem Content="登录"
-                                       x:Name="LoginItem"
-                                       Icon="{ui:SymbolIcon NoteAdd24}"
-                                       TargetPageType="{x:Type pages:LoginPage}" />
+                <ui:NavigationViewItem
+                    Content="登录"
+                    x:Name="LoginItem"
+                    Icon="{ui:SymbolIcon NoteAdd24}"
+                    TargetPageType="{x:Type pages:LoginPage}" />
 
-                <ui:NavigationViewItem Content="用户页"
-                                       x:Name="UserItem"
-                                       Visibility="Collapsed"
-                                       NavigationCacheMode="Enabled"
-                                       Icon="{ui:SymbolIcon ContactCard24}"
-                                       TargetPageType="{x:Type pages:UserinfoPage}" />
+                <ui:NavigationViewItem
+                    Content="用户页"
+                    x:Name="UserItem"
+                    Visibility="Collapsed"
+                    NavigationCacheMode="Enabled"
+                    Icon="{ui:SymbolIcon ContactCard24}"
+                    TargetPageType="{x:Type pages:UserinfoPage}" />
 
-                <ui:NavigationViewItem Content="隧道管理"
-                                       x:Name="TunnelItem"
-                                       Visibility="Collapsed"
-                                       NavigationCacheMode="Enabled"
-                                       Icon="{ui:SymbolIcon Channel24}"
-                                       TargetPageType="{x:Type pages:TunnelPage}" />
+                <ui:NavigationViewItem
+                    Content="隧道管理"
+                    x:Name="TunnelItem"
+                    Visibility="Collapsed"
+                    NavigationCacheMode="Enabled"
+                    Icon="{ui:SymbolIcon Channel24}"
+                    TargetPageType="{x:Type pages:TunnelPage}" />
             </ui:NavigationView.MenuItems>
 
             <ui:NavigationView.FooterMenuItems>
-                <ui:NavigationViewItem Content="设置"
-                                       Icon="{ui:SymbolIcon Settings24}"
-                                       TargetPageType="{x:Type pages:SettingPage}" />
+                <ui:NavigationViewItem
+                    Content="设置"
+                    Icon="{ui:SymbolIcon Settings24}"
+                    TargetPageType="{x:Type pages:SettingPage}" />
             </ui:NavigationView.FooterMenuItems>
         </ui:NavigationView>
 
-        <Grid Grid.Row="1" Name="SnackbarGrid" />
+        <Grid
+            Grid.Row="1"
+            Name="SnackbarGrid" />
     </Grid>
 </ui:FluentWindow>

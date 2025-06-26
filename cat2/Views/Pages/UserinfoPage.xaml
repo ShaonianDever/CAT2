@@ -1,52 +1,85 @@
-﻿<Page x:Class="CAT2.Views.Pages.UserinfoPage"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-      xmlns:viewModels="clr-namespace:CAT2.ViewModels">
+﻿<Page
+    x:Class="CAT2.Views.Pages.UserinfoPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:viewModels="clr-namespace:CAT2.ViewModels">
 
     <Page.DataContext>
         <viewModels:UserinfoPageViewModel />
     </Page.DataContext>
 
-    <ui:Card Margin="0,25,35,25" HorizontalAlignment="Right" VerticalAlignment="Stretch">
-        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10">
-            <ui:Image Margin="0,0,0,10" Source="{Binding CurrentImage,Mode=TwoWay}" CornerRadius="100" Height="150" />
+    <ui:Card
+        Margin="0,25,35,25"
+        HorizontalAlignment="Right"
+        VerticalAlignment="Stretch">
 
-            <ui:TextBlock Margin="0,0,0,10" HorizontalAlignment="Center" Text="{Binding Name,Mode=TwoWay}"
-                          FontSize="18"
-                          FontWeight="Bold" />
-            <Label Margin="0,0,0,10" HorizontalAlignment="Center" Content="{Binding Email,Mode=TwoWay}"
-                   Foreground="Gray" />
+        <StackPanel
+            Orientation="Vertical"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Margin="10">
+
+            <ui:Image
+                Margin="0,0,0,10"
+                Source="{Binding CurrentImage,Mode=TwoWay}"
+                CornerRadius="100"
+                Height="150" />
+
+            <ui:TextBlock
+                Margin="0,0,0,10"
+                HorizontalAlignment="Center"
+                Text="{Binding Name,Mode=TwoWay}"
+                FontSize="18"
+                FontWeight="Bold" />
+            <Label
+                Margin="0,0,0,10"
+                HorizontalAlignment="Center"
+                Content="{Binding Email,Mode=TwoWay}"
+                Foreground="Gray" />
 
             <ui:TextBlock>
-                <Run Text="{Binding Integral,Mode=TwoWay}" />
+                <Run
+                    Text="{Binding Integral,Mode=TwoWay}" />
                 <LineBreak />
-                <Run Text="{Binding TunnelCount,Mode=TwoWay}" />
+                <Run
+                    Text="{Binding TunnelCount,Mode=TwoWay}" />
                 <LineBreak />
-                <Run Text="{Binding Group,Mode=TwoWay}" />
+                <Run
+                    Text="{Binding Group,Mode=TwoWay}" />
                 <LineBreak />
-                <Run Text="{Binding Regtime,Mode=TwoWay}" />
+                <Run
+                    Text="{Binding Regtime,Mode=TwoWay}" />
                 <LineBreak />
-                <Run Text="{Binding Bandwidth,Mode=TwoWay}" />
+                <Run
+                    Text="{Binding Bandwidth,Mode=TwoWay}" />
             </ui:TextBlock>
 
-            <ui:Flyout Placement="Top"
-                       IsOpen="{Binding IsFlyoutOpen, Mode=TwoWay}">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock HorizontalAlignment="Left"
-                               Text="你下好退出的决心了吗？"
-                               TextWrapping="WrapWithOverflow" />
-                    <Button Command="{Binding SignOutCommand}" Margin="0,8,10,0" Content="确定" />
+            <ui:Flyout
+                Placement="Top"
+                IsOpen="{Binding IsFlyoutOpen, Mode=TwoWay}">
+                <StackPanel
+                    Orientation="Horizontal">
+                    <TextBlock
+                        HorizontalAlignment="Left"
+                        Text="你下好退出的决心了吗？"
+                        TextWrapping="WrapWithOverflow" />
+
+                    <Button
+                        ToolTip="😭我还会再想你的"
+                        Command="{Binding SignOutCommand}"
+                        Margin="0,10,10,0"
+                        Content="确定" />
                 </StackPanel>
             </ui:Flyout>
 
-            <ui:Button HorizontalAlignment="Center"
-                       Command="{Binding OpenFlyoutCommand}"
-                       CommandParameter="{Binding RelativeSource={RelativeSource Self}, Mode=OneWay}"
-                       ToolTip="怎么不退出了？"
-                       Appearance="Primary"
-                       Icon="{ui:SymbolIcon SignOut24}"
-                       Content="退出登录" />
+            <ui:Button
+                HorizontalAlignment="Center"
+                Command="{Binding OpenFlyoutCommand}"
+                ToolTip="怎么不退出了？"
+                Appearance="Primary"
+                Icon="{ui:SymbolIcon SignOut24}"
+                Content="退出登录" />
         </StackPanel>
     </ui:Card>
 </Page>

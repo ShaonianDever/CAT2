@@ -1,4 +1,4 @@
-name: Project Publishing
+name: Publish this
 on:
   push:
     paths: ['cat2/**', '.github/workflows/Publish.yml']
@@ -6,9 +6,6 @@ on:
 
 jobs:
   build:
-    strategy:
-      matrix:
-        configuration: [Release]
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@main
@@ -17,8 +14,8 @@ jobs:
           path: ~/.nuget/packages
           key: nuget-${{ runner.os }}-${{ hashFiles('**/*.csproj') }}
           restore-keys: nuget-${{ runner.os }}-
-      - run: dotnet publish -r win-x64 -c ${{ matrix.configuration }} /p:PublishSingleFile=true --self-contained false
+      - run: dotnet publish -r win-x64 /p:PublishSingleFile=true --self-contained false
       - uses: actions/upload-artifact@main
         with:
-          name: ${{ matrix.configuration }}
+          name: Release
           path: '**/publish/'

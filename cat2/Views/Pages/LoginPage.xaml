@@ -1,57 +1,65 @@
-﻿<Page x:Class="CAT2.Views.Pages.LoginPage"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-      xmlns:viewModels="clr-namespace:CAT2.ViewModels">
+﻿<Page
+    x:Class="CAT2.Views.Pages.LoginPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:viewModels="clr-namespace:CAT2.ViewModels">
 
     <Page.DataContext>
         <viewModels:LoginPageViewModel />
     </Page.DataContext>
 
-    <ui:Card Margin="65,75,65,75"
-             Padding="25">
-        <StackPanel Orientation="Vertical">
-            <TextBlock HorizontalAlignment="Center"
-                       VerticalAlignment="Top"
-                       FontSize="28">
-                <Run Text="登录" />
-                <Run Text="ChmlFrp" FontWeight="Bold" FontSize="25" />
+    <ui:Card
+        Padding="25"
+        Margin="65,75,65,75">
+        <StackPanel
+            Orientation="Vertical">
+            <TextBlock
+                FontSize="28"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top">
+                <Run
+                    Text="登录" />
+                <Run
+                    FontSize="25"
+                    FontWeight="Bold"
+                    Text="ChmlFrp" />
             </TextBlock>
 
-            <ui:TextBox Margin="0,25,0,0"
-                        Text="{Binding Username,Mode=TwoWay}"
-                        FontSize="16"
-                        PlaceholderText="用户名"
-                        Icon="{ui:SymbolIcon Rename16}" />
+            <ui:TextBox
+                FontSize="16"
+                Margin="0,25,0,15"
+                PlaceholderText="用户名"
+                Icon="{ui:SymbolIcon Rename24}"
+                Text="{Binding Username,Mode=TwoWay}" />
 
-            <ui:PasswordBox Margin="0,25,0,0"
-                            Password="{Binding Password,Mode=TwoWay}"
-                            FontSize="16"
-                            PlaceholderText="密码"
-                            Icon="{ui:SymbolIcon Password16}" />
+            <ui:PasswordBox
+                FontSize="16"
+                Margin="0,0,0,30"
+                PlaceholderText="密码"
+                Icon="{ui:SymbolIcon Password24}"
+                Password="{Binding Password,Mode=TwoWay}" />
 
-            <Grid Margin="0,20,0,0">
-                <ui:Button ToolTip="到底有没有账号a！"
-                           HorizontalAlignment="Left"
-                           VerticalAlignment="Bottom"
-                           Padding="12,8,12,8"
-                           Appearance="Primary"
-                           Command="{Binding RegisterClickCommand}">
-                    <ui:Button.Content>
-                        <TextBlock Text="注册" FontSize="16" />
-                    </ui:Button.Content>
-                </ui:Button>
+            <Grid>
+                <ui:Button
+                    Padding="8"
+                    Appearance="Primary"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Bottom"
+                    Content="注册"
+                    ToolTip="到底有没有账号a！"
+                    Icon="{ui:SymbolIcon AddSquare24}"
+                    Command="{Binding RegisterClickCommand}" />
 
-                <ui:Button ToolTip="快点a！"
-                           HorizontalAlignment="Right"
-                           VerticalAlignment="Bottom"
-                           Padding="12,8,12,8"
-                           Appearance="Primary"
-                           Command="{Binding LoginClickCommand}">
-                    <ui:Button.Content>
-                        <TextBlock Text="登录" FontSize="16" />
-                    </ui:Button.Content>
-                </ui:Button>
+                <ui:Button
+                    Padding="8"
+                    Appearance="Primary"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom"
+                    Content="登录"
+                    ToolTip="快点登录a！"
+                    Icon="{ui:SymbolIcon SignOut24}"
+                    Command="{Binding LoginClickCommand}" />
             </Grid>
         </StackPanel>
     </ui:Card>

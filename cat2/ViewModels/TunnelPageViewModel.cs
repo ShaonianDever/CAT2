@@ -9,8 +9,8 @@ namespace CAT2.ViewModels;
 
 public partial class TunnelPageViewModel : ObservableObject
 {
+    [ObservableProperty] private bool _isCreateTunnelFlyoutOpen;
     [ObservableProperty] private Visibility _isNumberBoxVisibility;
-    [ObservableProperty] private bool _isSelected;
 
     [ObservableProperty] private Visibility _isTextBoxVisibility;
 
@@ -42,24 +42,18 @@ public partial class TunnelPageViewModel : ObservableObject
 
         var tunnelsData = await Tunnel.GetTunnelsData();
         if (tunnelsData == null)
-        {
             Model.ShowTip(
                 "加载隧道信息失败",
                 "请检查网络连接或稍后重试。",
                 ControlAppearance.Danger,
                 SymbolRegular.TagError24);
-        }
         else if (tunnelsData.Count == 0)
-        {
             Model.ShowTip(
                 "没有隧道信息",
                 "当前没有可用的隧道信息，请注册隧道。",
                 ControlAppearance.Danger,
                 SymbolRegular.Warning24);
-            IsSelected = true;
-        }
         else
-        {
             foreach (var tunnelData in tunnelsData)
             {
                 var person = new TunnelItem(this)
@@ -74,7 +68,6 @@ public partial class TunnelPageViewModel : ObservableObject
                 if (tunnelData.ip.Contains("vip")) Viplist.Add(person);
                 if (tunnelData.nodestate != "online") Offlinelist.Add(person);
             }
-        }
 
         // 节点数据
         NodeDataContext = [];
@@ -130,12 +123,14 @@ public partial class TunnelPageViewModel : ObservableObject
             return;
         }
 
-        if (msg.Contains("已成功创建"))
+        if (msg.Contains("成功"))
         {
             Model.ShowTip("隧道创建成功",
                 $"{msg}。",
                 ControlAppearance.Success,
                 SymbolRegular.Checkmark24);
+            RemotePort = string.Empty;
+            LocalPort = string.Empty;
             Loading(null, null);
             return;
         }
@@ -144,6 +139,12 @@ public partial class TunnelPageViewModel : ObservableObject
             msg,
             ControlAppearance.Danger,
             SymbolRegular.TagError24);
+    }
+
+    [RelayCommand]
+    private void ShowFlyout()
+    {
+        IsCreateTunnelFlyoutOpen = true;
     }
 }
 
