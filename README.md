@@ -6,11 +6,9 @@
 
 CAT2 是 [CAT](https://github.com/ChmlFrp/ChmlFrp_Advanced_Toolkit) 的全新续作。核心功能已迁移至 ChmlFrp.SDK，CAT2 主要作为基于 SDK 的应用示例。如果你关注底层实现，请前往 [ChmlFrp.SDK](https://github.com/ChmlFrp/ChmlFrp.SDK) 查看。
 
-## 使用说明
+## 下载
 
-1. 请确保你的 Windows 系统已安装 .NET 9.0。如未安装，请[点击这里下载](https://dotnet.microsoft.com/download/dotnet/thank-you/runtime-desktop-9.0.6-windows-x64-installer)。
-2. 下载 CAT2：
+下载 CAT2：
    - 可通过 [GitHub Actions](https://github.com/ChmlFrp/CAT2/actions/workflows/Publish.yml) 获取最新构建版本。
+   - 可通过 [GitHub Releases](https://github.com/ChmlFrp/CAT2/Releases) 下载最新版本。
    - 或通过 [123云盘](https://www.123865.com/s/CloMjv-M7y0h) 下载。
-
-下载完成后，解压并直接运行主程序即可开始使用。
