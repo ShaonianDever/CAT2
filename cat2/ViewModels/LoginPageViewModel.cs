@@ -58,6 +58,6 @@ public partial class LoginPageViewModel : ObservableObject
             SymbolRegular.Tag24);
 
         await Task.Delay(500);
-        Process.Start(new ProcessStartInfo("https://panel.chmlfrp.cn/sign"));
+        Process.Start(new ProcessStartInfo("https://panel.chmlfrp.cn/sign") { UseShellExecute = true });
     }
 }
