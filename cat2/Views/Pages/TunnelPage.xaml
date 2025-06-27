@@ -47,37 +47,49 @@
                     </Grid>
                 </ui:CardExpander.Header>
 
-                <StackPanel
-                    Orientation="Horizontal">
-                    <ui:Button
-                        Content="编辑隧道"
-                        Margin="10,0,0,0" />
+                <Grid>
+                    <StackPanel
+                        Orientation="Horizontal">
+                        <ui:Button
+                            Content="编辑隧道"
+                            Margin="10,0,0,0" />
 
-                    <ui:Flyout
-                        Placement="Top"
-                        IsOpen="{Binding IsFlyoutOpen, Mode=TwoWay}">
-                        <StackPanel
-                            Orientation="Horizontal">
-                            <TextBlock
-                                HorizontalAlignment="Left"
-                                Text="你下好删除的决心了吗？"
-                                TextWrapping="WrapWithOverflow" />
+                        <ui:Flyout
+                            Placement="Top"
+                            IsOpen="{Binding IsFlyoutOpen, Mode=TwoWay}">
+                            <StackPanel
+                                Orientation="Horizontal">
+                                <TextBlock
+                                    HorizontalAlignment="Left"
+                                    Text="你下好删除的决心了吗？"
+                                    TextWrapping="WrapWithOverflow" />
 
-                            <ui:Button
-                                ToolTip="没事再来一瓶🤓"
-                                Command="{Binding DeleteTunnelCommand}"
-                                Margin="0,10,10,0"
-                                Content="确定" />
-                        </StackPanel>
-                    </ui:Flyout>
+                                <ui:Button
+                                    ToolTip="没事再来一瓶🤓"
+                                    Command="{Binding DeleteTunnelCommand}"
+                                    Margin="0,10,10,0"
+                                    Content="确定" />
+                            </StackPanel>
+                        </ui:Flyout>
 
-                    <ui:Button
-                        Command="{Binding OpenFlyoutCommand}"
-                        ToolTip="怎么不退出了？"
-                        Icon="{ui:SymbolIcon Delete48}"
-                        Appearance="Danger"
-                        Content="删除隧道" />
-                </StackPanel>
+                        <ui:Button
+                            Command="{Binding OpenFlyoutCommand}"
+                            ToolTip="怎么不退出了？"
+                            Icon="{ui:SymbolIcon Delete48}"
+                            Appearance="Danger"
+                            Content="删除隧道" />
+                    </StackPanel>
+
+                    <ui:TextBlock
+                        Text="{Binding Url}"
+                        ToolTip="点击复制"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center">
+                        <ui:TextBlock.InputBindings>
+                            <MouseBinding Gesture="LeftClick" Command="{Binding CopyTunnelCommand}" />
+                        </ui:TextBlock.InputBindings>
+                    </ui:TextBlock>
+                </Grid>
             </ui:CardExpander>
         </DataTemplate>
     </Page.Resources>
@@ -101,25 +113,6 @@
                 <ui:ListView
                     Margin="0,10,0,10"
                     ItemsSource="{Binding ListDataContext,Mode=TwoWay}"
-                    ItemTemplate="{StaticResource ListViewItemTemplate}" />
-            </TabItem>
-
-            <TabItem>
-                <TabItem.Header>
-                    <StackPanel
-                        Orientation="Horizontal">
-                        <ui:SymbolIcon
-                            Margin="0,0,6,0"
-                            Symbol="TagLock24" />
-
-                        <TextBlock
-                            Text="VIP" />
-                    </StackPanel>
-                </TabItem.Header>
-
-                <ui:ListView
-                    Margin="0,10,0,10"
-                    ItemsSource="{Binding Viplist,Mode=TwoWay}"
                     ItemTemplate="{StaticResource ListViewItemTemplate}" />
             </TabItem>
 
@@ -200,7 +193,6 @@
                         Margin="0,0,5,0" />
 
                     <ui:NumberBox
-                        Visibility="{Binding IsNumberBoxVisibility,Mode=TwoWay}"
                         Text="{Binding RemotePort,Mode=TwoWay}"
                         Maximum="65534" Minimum="1"
                         PlaceholderText="外网端口" />

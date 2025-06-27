@@ -4,15 +4,13 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using Wpf.Ui.Controls;
+using static CAT2.Model;
 
 namespace CAT2.ViewModels;
 
 public partial class TunnelPageViewModel : ObservableObject
 {
     [ObservableProperty] private bool _isCreateTunnelFlyoutOpen;
-    [ObservableProperty] private Visibility _isNumberBoxVisibility;
-
-    [ObservableProperty] private Visibility _isTextBoxVisibility;
 
     // 隧道列表
     [ObservableProperty] private ObservableCollection<TunnelItem> _listDataContext;
@@ -24,7 +22,6 @@ public partial class TunnelPageViewModel : ObservableObject
     [ObservableProperty] private ObservableCollection<TunnelItem> _offlinelist;
     [ObservableProperty] private string _remotePort;
     [ObservableProperty] private string _tunnelType;
-    [ObservableProperty] private ObservableCollection<TunnelItem> _viplist;
 
     public TunnelPageViewModel()
     {
@@ -38,17 +35,16 @@ public partial class TunnelPageViewModel : ObservableObject
     {
         ListDataContext = [];
         Offlinelist = [];
-        Viplist = [];
 
         var tunnelsData = await Tunnel.GetTunnelsData();
         if (tunnelsData == null)
-            Model.ShowTip(
+            ShowTip(
                 "加载隧道信息失败",
                 "请检查网络连接或稍后重试。",
                 ControlAppearance.Danger,
                 SymbolRegular.TagError24);
         else if (tunnelsData.Count == 0)
-            Model.ShowTip(
+            ShowTip(
                 "没有隧道信息",
                 "当前没有可用的隧道信息，请注册隧道。",
                 ControlAppearance.Danger,
@@ -65,7 +61,6 @@ public partial class TunnelPageViewModel : ObservableObject
                     Url = $"{tunnelData.ip}:{tunnelData.dorp}"
                 };
                 ListDataContext.Add(person);
-                if (tunnelData.ip.Contains("vip")) Viplist.Add(person);
                 if (tunnelData.nodestate != "online") Offlinelist.Add(person);
             }
 
@@ -86,26 +81,13 @@ public partial class TunnelPageViewModel : ObservableObject
         }
     }
 
-    partial void OnTunnelTypeChanged(string value)
-    {
-        if (value is "http" or "https")
-        {
-            IsNumberBoxVisibility = Visibility.Collapsed;
-            IsTextBoxVisibility = Visibility.Visible;
-        }
-        else
-        {
-            IsNumberBoxVisibility = Visibility.Visible;
-            IsTextBoxVisibility = Visibility.Collapsed;
-        }
-    }
-
     [RelayCommand]
     private async Task CreateTunnel()
     {
-        if (NodeName == null || string.IsNullOrEmpty(LocalPort) || string.IsNullOrEmpty(RemotePort))
+        if (NodeName == null || string.IsNullOrEmpty(NodeName.Name) || string.IsNullOrEmpty(LocalPort) ||
+            string.IsNullOrEmpty(RemotePort))
         {
-            Model.ShowTip("输入错误",
+            ShowTip("输入错误",
                 "请确保所有字段都已填写。",
                 ControlAppearance.Danger,
                 SymbolRegular.Warning24);
@@ -116,7 +98,7 @@ public partial class TunnelPageViewModel : ObservableObject
 
         if (msg == null)
         {
-            Model.ShowTip("隧道创建失败",
+            ShowTip("隧道创建失败",
                 "请检查网络连接或稍后重试。",
                 ControlAppearance.Danger,
                 SymbolRegular.TagError24);
@@ -125,7 +107,7 @@ public partial class TunnelPageViewModel : ObservableObject
 
         if (msg.Contains("成功"))
         {
-            Model.ShowTip("隧道创建成功",
+            ShowTip("隧道创建成功",
                 $"{msg}。",
                 ControlAppearance.Success,
                 SymbolRegular.Checkmark24);
@@ -135,7 +117,7 @@ public partial class TunnelPageViewModel : ObservableObject
             return;
         }
 
-        Model.ShowTip("隧道创建失败",
+        ShowTip("隧道创建失败",
             msg,
             ControlAppearance.Danger,
             SymbolRegular.TagError24);
@@ -156,7 +138,7 @@ public partial class TunnelItem(TunnelPageViewModel parentViewModel) : Observabl
     [ObservableProperty] private bool _isFlyoutOpen;
     [ObservableProperty] private bool _isTunnelStarted;
     [ObservableProperty] private string _name;
-    public string Url;
+    [ObservableProperty] private string _url;
 
     [RelayCommand]
     private void Tunnel()
@@ -171,7 +153,7 @@ public partial class TunnelItem(TunnelPageViewModel parentViewModel) : Observabl
             {
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    Model.ShowTip(
+                    ShowTip(
                         "隧道已在运行",
                         $"隧道 {Name} 已在运行中。",
                         ControlAppearance.Danger,
@@ -184,7 +166,7 @@ public partial class TunnelItem(TunnelPageViewModel parentViewModel) : Observabl
             {
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    Model.ShowTip(
+                    ShowTip(
                         "FRPC 暂未安装",
                         "请等待一会，或重新启动。（软件会自动安装）",
                         ControlAppearance.Danger,
@@ -198,7 +180,7 @@ public partial class TunnelItem(TunnelPageViewModel parentViewModel) : Observabl
             {
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    Model.ShowTip(
+                    ShowTip(
                         "隧道启动数据获取失败",
                         "请检查网络状态，或查看API状态。",
                         ControlAppearance.Danger,
@@ -212,7 +194,7 @@ public partial class TunnelItem(TunnelPageViewModel parentViewModel) : Observabl
             {
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    Model.ShowTip(
+                    ShowTip(
                         "隧道启动失败",
                         $"隧道 {Name} 启动失败，具体请看日志。",
                         ControlAppearance.Danger,
@@ -226,7 +208,7 @@ public partial class TunnelItem(TunnelPageViewModel parentViewModel) : Observabl
             {
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    Model.ShowTip("隧道启动成功",
+                    ShowTip("隧道启动成功",
                         $"隧道 {Name} 已成功启动，链接已复制到剪切板。",
                         ControlAppearance.Success,
                         SymbolRegular.Checkmark24);
@@ -243,7 +225,7 @@ public partial class TunnelItem(TunnelPageViewModel parentViewModel) : Observabl
             {
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    Model.ShowTip("隧道关闭成功",
+                    ShowTip("隧道关闭成功",
                         $"隧道 {Name} 已成功关闭。",
                         ControlAppearance.Success,
                         SymbolRegular.Checkmark24);
@@ -255,7 +237,7 @@ public partial class TunnelItem(TunnelPageViewModel parentViewModel) : Observabl
             {
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    Model.ShowTip("隧道关闭失败",
+                    ShowTip("隧道关闭失败",
                         $"隧道 {Name} 已退出。",
                         ControlAppearance.Danger,
                         SymbolRegular.TagError24);
@@ -271,20 +253,38 @@ public partial class TunnelItem(TunnelPageViewModel parentViewModel) : Observabl
     {
         ChmlFrp.SDK.API.Tunnel.DeleteTunnel(Name);
 
-        Model.ShowTip("隧道删除成功",
+        ShowTip("隧道删除成功",
             $"隧道 {Name} 已成功删除。",
             ControlAppearance.Success,
             SymbolRegular.Checkmark24);
 
         parentViewModel.ListDataContext.Remove(this);
         parentViewModel.Offlinelist.Remove(this);
-        parentViewModel.Viplist.Remove(this);
     }
 
     [RelayCommand]
     private void OpenFlyout()
     {
         IsFlyoutOpen = true;
+    }
+
+
+    [RelayCommand]
+    private void CopyTunnel()
+    {
+        try
+        {
+            Clipboard.SetDataObject(Url, true);
+        }
+        catch
+        {
+            return;
+        }
+
+        ShowTip("链接已复制",
+            $"隧道 {Name} 的链接已复制到剪切板。",
+            ControlAppearance.Success,
+            SymbolRegular.Checkmark24);
     }
 }
 
