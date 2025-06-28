@@ -11,6 +11,7 @@ namespace CAT2.ViewModels;
 public partial class TunnelPageViewModel : ObservableObject
 {
     [ObservableProperty] private bool _isCreateTunnelFlyoutOpen;
+    [ObservableProperty] private bool _isTunnelEnabled;
 
     // 隧道列表
     [ObservableProperty] private ObservableCollection<TunnelItem> _listDataContext;
@@ -25,10 +26,40 @@ public partial class TunnelPageViewModel : ObservableObject
 
     public TunnelPageViewModel()
     {
+        LoadNodes();
         Loading(null, null);
         var timer = new DispatcherTimer { Interval = TimeSpan.FromMinutes(1) };
         timer.Tick += Loading;
         timer.Start();
+    }
+
+    partial void OnRemotePortChanged(string value)
+    {
+        IsTunnelEnabled = !string.IsNullOrEmpty(value) && !string.IsNullOrEmpty(LocalPort);
+    }
+
+    partial void OnLocalPortChanged(string value)
+    {
+        IsTunnelEnabled = !string.IsNullOrEmpty(RemotePort) && !string.IsNullOrEmpty(value);
+    }
+
+    private async void LoadNodes()
+    {
+        // 节点数据
+        NodeDataContext = [];
+        foreach (var nodeData in await Node.GetNodeData())
+        {
+            nodeData.udp = nodeData.udp == "true" ? "允许UDP" : "不允许UDP";
+            nodeData.web = nodeData.web == "yes" ? "允许建站" : "不允许建站";
+            nodeData.nodegroup = nodeData.nodegroup == "vip" ? "VIP节点" : "免费节点";
+
+            NodeDataContext.Add(new NodeItem
+            {
+                Name = nodeData.name,
+                Content = $"{nodeData.name} ({nodeData.nodegroup})",
+                Notes = $"{nodeData.notes} {nodeData.udp} {nodeData.web}"
+            });
+        }
     }
 
     private async void Loading(object sender, EventArgs e)
@@ -63,37 +94,11 @@ public partial class TunnelPageViewModel : ObservableObject
                 ListDataContext.Add(person);
                 if (tunnelData.nodestate != "online") Offlinelist.Add(person);
             }
-
-        // 节点数据
-        NodeDataContext = [];
-        foreach (var nodeData in await Node.GetNodeData())
-        {
-            nodeData.udp = nodeData.udp == "true" ? "允许UDP" : "不允许UDP";
-            nodeData.web = nodeData.web == "yes" ? "允许建站" : "不允许建站";
-            nodeData.nodegroup = nodeData.nodegroup == "vip" ? "VIP节点" : "免费节点";
-
-            NodeDataContext.Add(new NodeItem
-            {
-                Name = nodeData.name,
-                Content = $"{nodeData.name} ({nodeData.nodegroup})",
-                Notes = $"{nodeData.notes} {nodeData.udp} {nodeData.web}"
-            });
-        }
     }
 
     [RelayCommand]
     private async Task CreateTunnel()
     {
-        if (NodeName == null || string.IsNullOrEmpty(NodeName.Name) || string.IsNullOrEmpty(LocalPort) ||
-            string.IsNullOrEmpty(RemotePort))
-        {
-            ShowTip("输入错误",
-                "请确保所有字段都已填写。",
-                ControlAppearance.Danger,
-                SymbolRegular.Warning24);
-            return;
-        }
-
         var msg = await Tunnel.CreateTunnel(NodeName.Name, TunnelType, LocalPort, RemotePort);
 
         if (msg == null)

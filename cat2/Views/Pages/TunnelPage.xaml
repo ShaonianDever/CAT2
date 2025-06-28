@@ -163,6 +163,7 @@
                     <ComboBox
                         ItemsSource="{Binding NodeDataContext,Mode=TwoWay}"
                         SelectedValue="{Binding NodeName, Mode=TwoWay}"
+                        SelectedIndex="0"
                         Margin="0,0,5,0">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
@@ -187,13 +188,13 @@
                     Orientation="Horizontal"
                     Margin="0,0,0,10">
                     <ui:NumberBox
-                        Text="{Binding LocalPort,Mode=TwoWay}"
+                        Text="{Binding LocalPort,UpdateSourceTrigger=PropertyChanged}"
                         PlaceholderText="内网端口"
                         Maximum="65534" Minimum="1"
                         Margin="0,0,5,0" />
 
                     <ui:NumberBox
-                        Text="{Binding RemotePort,Mode=TwoWay}"
+                        Text="{Binding RemotePort,UpdateSourceTrigger=PropertyChanged}"
                         Maximum="65534" Minimum="1"
                         PlaceholderText="外网端口" />
                 </StackPanel>
@@ -203,6 +204,7 @@
                     HorizontalAlignment="Right"
                     Appearance="Primary"
                     Icon="{ui:SymbolIcon Add48}"
+                    IsEnabled="{Binding IsTunnelEnabled}"
                     Content="添加隧道"
                     Padding="8" />
             </StackPanel>

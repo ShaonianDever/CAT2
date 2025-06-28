@@ -3,6 +3,7 @@
     <PropertyGroup>
         <UseWPF>true</UseWPF>
         <Version>1.0.1.5</Version>
+        <FileVersion>0.2</FileVersion>
         <OutputType>WinExe</OutputType>
         <LangVersion>preview</LangVersion>
         <ApplicationIcon>logo.ico</ApplicationIcon>
