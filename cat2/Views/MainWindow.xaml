@@ -49,12 +49,14 @@
                     <ui:Button
                         Height="30" Width="45"
                         Margin="5,0,0,0"
+                        ToolTip="a怎么看看不见了？ (●ˇ∀ˇ●)"
                         Command="{Binding MinimizeThisCommand}"
                         Icon="{ui:SymbolIcon ArrowMinimize24}" />
 
                     <ui:Button
                         Height="30" Width="45"
                         Margin="5,0,0,0"
+                        ToolTip="别走a (っ °Д °;)っ"
                         Command="{Binding CloseThisCommand}"
                         Icon="{ui:SymbolIcon ArrowExit20}" />
                 </StackPanel>

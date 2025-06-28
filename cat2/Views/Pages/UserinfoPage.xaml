@@ -76,7 +76,7 @@
             <ui:Button
                 HorizontalAlignment="Center"
                 Command="{Binding OpenFlyoutCommand}"
-                ToolTip="怎么不退出了？"
+                ToolTip="(°ー°〃) 你不会真要退出吧？"
                 Appearance="Primary"
                 Icon="{ui:SymbolIcon SignOut24}"
                 Content="退出登录" />

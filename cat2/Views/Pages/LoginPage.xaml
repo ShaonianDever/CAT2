@@ -38,6 +38,7 @@
                 Margin="0,0,0,30"
                 PlaceholderText="密码"
                 Icon="{ui:SymbolIcon Password24}"
+                ToolTip="密码字体怎么这么小？"
                 Password="{Binding Password,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
 
             <Grid>

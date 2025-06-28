@@ -36,7 +36,7 @@
                             <LineBreak />
                             <Run
                                 Foreground="{ui:ThemeResource TextFillColorDisabledBrush}"
-                                Text="© 2025 cat2.chmlfrp.com | Qusay Diaz"
+                                Text="{Binding Copyright}"
                                 FontSize="14" />
                         </ui:TextBlock>
 
@@ -46,6 +46,7 @@
                         Margin="10"
                         Foreground="{ui:ThemeResource TextFillColorDisabledBrush}"
                         HorizontalAlignment="Right"
+                        ToolTip="{Binding FileVersion}"
                         Content="{Binding Version}" />
                 </Grid>
             </ui:CardExpander.Header>

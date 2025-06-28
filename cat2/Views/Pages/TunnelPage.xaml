@@ -51,6 +51,7 @@
                     <StackPanel
                         Orientation="Horizontal">
                         <ui:Button
+                            ToolTip="o还没写✍ (￣▽￣)"
                             Content="编辑隧道"
                             Margin="10,0,0,0" />
 
@@ -74,7 +75,7 @@
 
                         <ui:Button
                             Command="{Binding OpenFlyoutCommand}"
-                            ToolTip="怎么不退出了？"
+                            ToolTip="￣へ￣ 你确定要删除吗？"
                             Icon="{ui:SymbolIcon Delete48}"
                             Appearance="Danger"
                             Content="删除隧道" />

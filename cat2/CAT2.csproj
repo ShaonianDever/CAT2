@@ -3,8 +3,8 @@
     <PropertyGroup>
         <UseWPF>true</UseWPF>
         <Version>1.0.1.5</Version>
-        <FileVersion>0.2</FileVersion>
         <OutputType>WinExe</OutputType>
+        <FileVersion>0.0.0.3</FileVersion>
         <LangVersion>preview</LangVersion>
         <ApplicationIcon>logo.ico</ApplicationIcon>
         <TargetFramework>net9.0-windows</TargetFramework>
