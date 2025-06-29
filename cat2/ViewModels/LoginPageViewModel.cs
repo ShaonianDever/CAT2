@@ -1,9 +1,4 @@
-﻿using System.Diagnostics;
-using System.Threading.Tasks;
-using System.Windows;
-using Wpf.Ui.Controls;
-
-namespace CAT2.ViewModels;
+﻿namespace CAT2.ViewModels;
 
 public partial class LoginPageViewModel : ObservableObject
 {
@@ -28,11 +23,11 @@ public partial class LoginPageViewModel : ObservableObject
 
         if (Sign.IsSignin)
         {
-            Model.MainClass.LoginItem.Visibility = Visibility.Collapsed;
-            Model.MainClass.UserItem.Visibility = Visibility.Visible;
-            Model.MainClass.TunnelItem.Visibility = Visibility.Visible;
-            Model.MainClass.RootNavigation.Navigate("用户页");
-            Model.ShowTip(
+            MainClass.LoginItem.Visibility = Visibility.Collapsed;
+            MainClass.UserItem.Visibility = Visibility.Visible;
+            MainClass.TunnelItem.Visibility = Visibility.Visible;
+            MainClass.RootNavigation.Navigate("用户页");
+            ShowTip(
                 "登录成功！",
                 $"欢迎回来，{Username}！",
                 ControlAppearance.Success,
@@ -40,7 +35,7 @@ public partial class LoginPageViewModel : ObservableObject
         }
         else
         {
-            Model.ShowTip(
+            ShowTip(
                 "登录错误",
                 $"{msg}",
                 ControlAppearance.Danger,
@@ -51,7 +46,7 @@ public partial class LoginPageViewModel : ObservableObject
     [RelayCommand]
     private async Task RegisterClick()
     {
-        Model.ShowTip(
+        ShowTip(
             "跳转至网页中...",
             "请稍等...",
             ControlAppearance.Info,

@@ -1,11 +1,6 @@
-﻿using System;
-using System.Diagnostics;
-using System.IO;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.IO;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
-using Wpf.Ui.Controls;
 
 namespace CAT2.ViewModels;
 
@@ -40,7 +35,7 @@ public partial class UserinfoPageViewModel : ObservableObject
         var userInfo = await User.GetUserInfo();
         if (userInfo == null)
         {
-            Model.ShowTip(
+            ShowTip(
                 "加载用户信息失败",
                 "请检查网络连接或稍后重试。",
                 ControlAppearance.Danger,
@@ -56,6 +51,7 @@ public partial class UserinfoPageViewModel : ObservableObject
         TunnelCount = $"隧道使用：{userInfo.tunnelCount}/{userInfo.tunnel}";
         Bandwidth = $"带宽限制：国内{userInfo.bandwidth}m | 国外{userInfo.bandwidth * 4}m";
 
+        if (CurrentImage != null) return;
         var tempUserImage = Path.GetTempFileName();
         if (await Http.GetFile(userInfo.userimg, tempUserImage))
         {
@@ -73,7 +69,7 @@ public partial class UserinfoPageViewModel : ObservableObject
     private static async Task OnSignOut()
     {
         Sign.Signout();
-        Model.ShowTip(
+        ShowTip(
             "已退出登录",
             "请重新登录以继续使用。",
             ControlAppearance.Info,

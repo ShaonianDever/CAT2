@@ -1,11 +1,7 @@
-﻿using System;
-using System.Diagnostics;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Windows;
 using CAT2.Views;
-using Wpf.Ui.Controls;
 
 namespace CAT2;
 
@@ -25,7 +21,6 @@ public abstract class Model
         .Copyright;
 
     public static readonly string AssemblyName = Assembly.GetExecutingAssembly().GetName().Name;
-
 
     public static async void ShowTip(string title, string content, ControlAppearance appearance, SymbolRegular icon)
     {

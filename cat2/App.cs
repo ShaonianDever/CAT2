@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using ChmlFrp.SDK;
+﻿using ChmlFrp.SDK;
 
 namespace CAT2.ViewModels;
 

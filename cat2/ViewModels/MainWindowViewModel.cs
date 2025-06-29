@@ -1,5 +1,4 @@
-﻿using System.Windows;
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 using Wpf.Ui.Appearance;
 
 namespace CAT2.ViewModels;
@@ -11,23 +10,23 @@ public partial class MainWindowViewModel : ObservableObject
 
     public MainWindowViewModel()
     {
-        Model.MainClass.Loaded += async (_, _) =>
+        MainClass.Loaded += async (_, _) =>
         {
             if (ApplicationThemeManager.GetSystemTheme() == SystemTheme.Dark) ThemesChanged();
 
-            Model.MainClass.RootNavigation.Navigate("登录");
+            MainClass.RootNavigation.Navigate("登录");
 
             await Sign.Signin();
             if (Sign.IsSignin)
             {
-                Model.MainClass.LoginItem.Visibility = Visibility.Collapsed;
-                Model.MainClass.UserItem.Visibility = Visibility.Visible;
-                Model.MainClass.TunnelItem.Visibility = Visibility.Visible;
-                Model.MainClass.RootNavigation.Navigate("用户页");
+                MainClass.LoginItem.Visibility = Visibility.Collapsed;
+                MainClass.UserItem.Visibility = Visibility.Visible;
+                MainClass.TunnelItem.Visibility = Visibility.Visible;
+                MainClass.RootNavigation.Navigate("用户页");
             }
 
-            Model.MainClass.Topmost = false;
-            Model.UpdateApp();
+            MainClass.Topmost = false;
+            UpdateApp();
         };
 
         SystemEvents.UserPreferenceChanged += (_, _) =>
@@ -49,12 +48,12 @@ public partial class MainWindowViewModel : ObservableObject
     [RelayCommand]
     private static void MinimizeThis()
     {
-        Model.MainClass.WindowState = WindowState.Minimized;
+        MainClass.WindowState = WindowState.Minimized;
     }
 
     [RelayCommand]
     private static void CloseThis()
     {
-        Model.MainClass.Close();
+        MainClass.Close();
     }
 }

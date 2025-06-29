@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Collections.ObjectModel;
 using System.Windows.Threading;
-using Wpf.Ui.Controls;
-using static CAT2.Model;
 
 namespace CAT2.ViewModels;
 
@@ -27,9 +22,9 @@ public partial class TunnelPageViewModel : ObservableObject
     public TunnelPageViewModel()
     {
         LoadNodes();
-        Loading(null, null);
+        LoadTunnels(null, null);
         var timer = new DispatcherTimer { Interval = TimeSpan.FromMinutes(1) };
-        timer.Tick += Loading;
+        timer.Tick += LoadTunnels;
         timer.Start();
     }
 
@@ -62,7 +57,7 @@ public partial class TunnelPageViewModel : ObservableObject
         }
     }
 
-    private async void Loading(object sender, EventArgs e)
+    private async void LoadTunnels(object sender, EventArgs e)
     {
         ListDataContext = [];
         Offlinelist = [];
@@ -118,7 +113,7 @@ public partial class TunnelPageViewModel : ObservableObject
                 SymbolRegular.Checkmark24);
             RemotePort = string.Empty;
             LocalPort = string.Empty;
-            Loading(null, null);
+            LoadTunnels(null, null);
             return;
         }
 
