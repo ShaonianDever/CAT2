@@ -81,9 +81,10 @@ public partial class TunnelPageViewModel : ObservableObject
                 var person = new TunnelItem(this)
                 {
                     Name = tunnelData.name,
-                    Id = $"#{tunnelData.id}",
+                    Id = $"[隧道ID:{tunnelData.id}]",
                     IsTunnelStarted = await ChmlFrp.SDK.Services.Tunnel.IsTunnelRunning(tunnelData.name),
-                    Info = $"{tunnelData.node}-{tunnelData.nport}-{tunnelData.type}",
+                    Info = $"[节点名称:{tunnelData.node}]-[隧道类型:{tunnelData.type}]",
+                    Tooltip = $"[内网端口:{tunnelData.nport}]-[外网端口/连接域名:{tunnelData.dorp}]-[节点状态:{tunnelData.nodestate}]",
                     Url = $"{tunnelData.ip}:{tunnelData.dorp}"
                 };
                 ListDataContext.Add(person);
@@ -138,6 +139,7 @@ public partial class TunnelItem(TunnelPageViewModel parentViewModel) : Observabl
     [ObservableProperty] private bool _isFlyoutOpen;
     [ObservableProperty] private bool _isTunnelStarted;
     [ObservableProperty] private string _name;
+    [ObservableProperty] private string _tooltip;
     [ObservableProperty] private string _url;
 
     [RelayCommand]

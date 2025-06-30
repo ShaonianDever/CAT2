@@ -20,18 +20,15 @@
                             HorizontalAlignment="Left"
                             Orientation="Horizontal">
                             <ui:TextBlock
-                                FontSize="18"
+                                FontSize="20"
                                 FontWeight="Bold"
+                                ToolTip="{Binding Id}"
                                 Text="{Binding Name}" />
-
-                            <ui:TextBlock
-                                FontSize="14"
-                                Foreground="Gray"
-                                Text="{Binding Id}" />
 
                             <ui:TextBlock
                                 FontSize="16"
                                 Margin="10,0,0,0"
+                                ToolTip="{Binding Tooltip}"
                                 Text="{Binding Info}" />
                         </StackPanel>
 
