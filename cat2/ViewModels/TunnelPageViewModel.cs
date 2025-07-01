@@ -78,14 +78,13 @@ public partial class TunnelPageViewModel : ObservableObject
         else
             foreach (var tunnelData in tunnelsData)
             {
-                var person = new TunnelItem(this)
+                var person = new TunnelItem(this, $"{tunnelData.ip}:{tunnelData.dorp}")
                 {
                     Name = tunnelData.name,
                     Id = $"[隧道ID:{tunnelData.id}]",
                     IsTunnelStarted = await ChmlFrp.SDK.Services.Tunnel.IsTunnelRunning(tunnelData.name),
                     Info = $"[节点名称:{tunnelData.node}]-[隧道类型:{tunnelData.type}]",
-                    Tooltip = $"[内网端口:{tunnelData.nport}]-[外网端口/连接域名:{tunnelData.dorp}]-[节点状态:{tunnelData.nodestate}]",
-                    Url = $"{tunnelData.ip}:{tunnelData.dorp}"
+                    Tooltip = $"[内网端口:{tunnelData.nport}]-[外网端口/连接域名:{tunnelData.dorp}]-[节点状态:{tunnelData.nodestate}]"
                 };
                 ListDataContext.Add(person);
                 if (tunnelData.nodestate != "online") Offlinelist.Add(person);
@@ -131,7 +130,7 @@ public partial class TunnelPageViewModel : ObservableObject
     }
 }
 
-public partial class TunnelItem(TunnelPageViewModel parentViewModel) : ObservableObject
+public partial class TunnelItem(TunnelPageViewModel parentViewModel, string url) : ObservableObject
 {
     [ObservableProperty] private string _id;
     [ObservableProperty] private string _info;
@@ -140,7 +139,7 @@ public partial class TunnelItem(TunnelPageViewModel parentViewModel) : Observabl
     [ObservableProperty] private bool _isTunnelStarted;
     [ObservableProperty] private string _name;
     [ObservableProperty] private string _tooltip;
-    [ObservableProperty] private string _url;
+    [ObservableProperty] private string _url = $"[连接地址:{url}]";
 
     [RelayCommand]
     private void Tunnel()
@@ -215,7 +214,7 @@ public partial class TunnelItem(TunnelPageViewModel parentViewModel) : Observabl
                         ControlAppearance.Success,
                         SymbolRegular.Checkmark24);
                     IsEnabled = true;
-                    Clipboard.SetDataObject(Url);
+                    Clipboard.SetDataObject(url);
                 });
             }
         }
@@ -276,7 +275,7 @@ public partial class TunnelItem(TunnelPageViewModel parentViewModel) : Observabl
     {
         try
         {
-            Clipboard.SetDataObject(Url, true);
+            Clipboard.SetDataObject(url, true);
         }
         catch
         {
