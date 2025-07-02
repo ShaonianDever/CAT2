@@ -1,5 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Threading;
+using static ChmlFrp.SDK.API.Tunnel;
+using static ChmlFrp.SDK.Services.Tunnel;
 
 namespace CAT2.ViewModels;
 
@@ -62,7 +64,7 @@ public partial class TunnelPageViewModel : ObservableObject
         ListDataContext = [];
         Offlinelist = [];
 
-        var tunnelsData = await Tunnel.GetTunnelsData();
+        var tunnelsData = await GetTunnelsData();
         if (tunnelsData == null)
             ShowTip(
                 "加载隧道信息失败",
@@ -82,7 +84,7 @@ public partial class TunnelPageViewModel : ObservableObject
                 {
                     Name = tunnelData.name,
                     Id = $"[隧道ID:{tunnelData.id}]",
-                    IsTunnelStarted = await ChmlFrp.SDK.Services.Tunnel.IsTunnelRunning(tunnelData.name),
+                    IsTunnelStarted = await IsTunnelRunning(tunnelData.name),
                     Info = $"[节点名称:{tunnelData.node}]-[隧道类型:{tunnelData.type}]",
                     Tooltip = $"[内网端口:{tunnelData.nport}]-[外网端口/连接域名:{tunnelData.dorp}]-[节点状态:{tunnelData.nodestate}]"
                 };
@@ -147,7 +149,7 @@ public partial class TunnelItem(TunnelPageViewModel parentViewModel, string url)
         IsEnabled = false;
         if (IsTunnelStarted)
         {
-            ChmlFrp.SDK.Services.Tunnel.StartTunnel(Name, StartTrueHandler, StartFalseHandler, IniUnKnown,
+            StartTunnel(Name, StartTrueHandler, StartFalseHandler, IniUnKnown,
                 FrpcNotExists, TunnelRunning);
 
             void TunnelRunning()
@@ -220,7 +222,7 @@ public partial class TunnelItem(TunnelPageViewModel parentViewModel, string url)
         }
         else
         {
-            ChmlFrp.SDK.Services.Tunnel.StopTunnel(Name, StopTrueHandler, StopFalseHandler);
+            StopTunnel(Name, StopTrueHandler, StopFalseHandler);
 
             void StopTrueHandler()
             {
@@ -252,6 +254,7 @@ public partial class TunnelItem(TunnelPageViewModel parentViewModel, string url)
     [RelayCommand]
     private void DeleteTunnel()
     {
+        StopTunnel(Name);
         ChmlFrp.SDK.API.Tunnel.DeleteTunnel(Name);
 
         ShowTip("隧道删除成功",
