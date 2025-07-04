@@ -20,6 +20,7 @@ public partial class LoginPageViewModel : ObservableObject
     private async Task LoginClick()
     {
         var msg = await Sign.Signin(Username, Password);
+        WritingLog($"登录提示：{msg}");
 
         if (Sign.IsSignin)
         {

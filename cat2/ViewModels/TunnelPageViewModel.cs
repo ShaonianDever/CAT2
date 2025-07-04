@@ -57,6 +57,8 @@ public partial class TunnelPageViewModel : ObservableObject
                 Notes = $"{nodeData.notes} {nodeData.udp} {nodeData.web}"
             });
         }
+
+        WritingLog(NodeDataContext.Count != 0 ? "节点数据加载成功" : "节点数据加载失败");
     }
 
     private async void LoadTunnels(object sender, EventArgs e)
@@ -66,18 +68,26 @@ public partial class TunnelPageViewModel : ObservableObject
 
         var tunnelsData = await GetTunnelsData();
         if (tunnelsData == null)
+        {
+            WritingLog("隧道信息加载失败");
             ShowTip(
                 "加载隧道信息失败",
                 "请检查网络连接或稍后重试。",
                 ControlAppearance.Danger,
                 SymbolRegular.TagError24);
+        }
         else if (tunnelsData.Count == 0)
+        {
+            WritingLog("没有隧道信息");
             ShowTip(
                 "没有隧道信息",
                 "当前没有可用的隧道信息，请注册隧道。",
                 ControlAppearance.Danger,
                 SymbolRegular.Warning24);
+        }
         else
+        {
+            WritingLog($"加载到 {tunnelsData.Count} 个隧道信息");
             foreach (var tunnelData in tunnelsData)
             {
                 var person = new TunnelItem(this, $"{tunnelData.ip}:{tunnelData.dorp}")
@@ -91,12 +101,16 @@ public partial class TunnelPageViewModel : ObservableObject
                 ListDataContext.Add(person);
                 if (tunnelData.nodestate != "online") Offlinelist.Add(person);
             }
+        }
     }
 
     [RelayCommand]
     private async Task CreateTunnel()
     {
         var msg = await Tunnel.CreateTunnel(NodeName.Name, TunnelType, LocalPort, RemotePort);
+
+        WritingLog($"创建隧道请求：{NodeName.Name} {TunnelType} {LocalPort} {RemotePort}");
+        WritingLog($"创建隧道返回：{msg}");
 
         if (msg == null)
         {
@@ -256,6 +270,7 @@ public partial class TunnelItem(TunnelPageViewModel parentViewModel, string url)
     {
         StopTunnel(Name);
         ChmlFrp.SDK.API.Tunnel.DeleteTunnel(Name);
+        WritingLog($"删除隧道请求：{Name}");
 
         ShowTip("隧道删除成功",
             $"隧道 {Name} 已成功删除。",
@@ -285,6 +300,7 @@ public partial class TunnelItem(TunnelPageViewModel parentViewModel, string url)
             return;
         }
 
+        WritingLog($"复制隧道链接：{url}");
         ShowTip("链接已复制",
             $"隧道 {Name} 的链接已复制到剪切板。",
             ControlAppearance.Success,

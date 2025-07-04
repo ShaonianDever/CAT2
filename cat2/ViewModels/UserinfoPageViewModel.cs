@@ -35,6 +35,7 @@ public partial class UserinfoPageViewModel : ObservableObject
         var userInfo = await User.GetUserInfo();
         if (userInfo == null)
         {
+            WritingLog("加载用户信息失败");
             ShowTip(
                 "加载用户信息失败",
                 "请检查网络连接或稍后重试。",
@@ -50,6 +51,8 @@ public partial class UserinfoPageViewModel : ObservableObject
         Regtime = $"注册时间：{userInfo.regtime}";
         TunnelCount = $"隧道使用：{userInfo.tunnelCount}/{userInfo.tunnel}";
         Bandwidth = $"带宽限制：国内{userInfo.bandwidth}m | 国外{userInfo.bandwidth * 4}m";
+
+        WritingLog("加载用户信息成功");
 
         if (CurrentImage != null) return;
         var tempUserImage = Path.GetTempFileName();
@@ -69,12 +72,14 @@ public partial class UserinfoPageViewModel : ObservableObject
     private static async Task OnSignOut()
     {
         Sign.Signout();
+        WritingLog("用户已退出登录");
         ShowTip(
             "已退出登录",
             "请重新登录以继续使用。",
             ControlAppearance.Info,
             SymbolRegular.SignOut24);
         await Task.Delay(1000);
+        WritingLog("正在重启应用程序");
         Process.Start(Path.Combine(AppContext.BaseDirectory,
             Path.GetFileName(Process.GetCurrentProcess().MainModule?.FileName)!));
         Application.Current.Shutdown();

@@ -10,13 +10,29 @@ public partial class MainWindowViewModel : ObservableObject
 
     public MainWindowViewModel()
     {
+        AppDomain.CurrentDomain.UnhandledException += (_, args) =>
+        {
+            if (args.ExceptionObject is not Exception ex) return;
+
+            WritingLog(ex.Message.Contains("拒绝访问")
+                ? "请以管理员身份运行本程序"
+                : $"请将此日志反馈给开发者\n联系方式：\n1.QQ：2976779544\n2.Email：Qusay_Diaz@outlook.com\n3.GitHub：Qianyiaz/CAT2\n版本号：{Model.Version}次版本号：{FileVersion}\n异常信息：\n{ex}");
+
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = LogFilePath,
+                UseShellExecute = true
+            });
+        };
+
         MainClass.Loaded += async (_, _) =>
         {
+            Init("CAT2");
+
             if (ApplicationThemeManager.GetSystemTheme() == SystemTheme.Dark) ThemesChanged();
 
             MainClass.RootNavigation.Navigate("登录");
-
-            await Sign.Signin();
+            WritingLog($"验证上次登录：{await Sign.Signin()}");
             if (Sign.IsSignin)
             {
                 MainClass.LoginItem.Visibility = Visibility.Collapsed;
@@ -27,6 +43,7 @@ public partial class MainWindowViewModel : ObservableObject
 
             MainClass.Topmost = false;
             UpdateApp();
+            WritingLog("主窗口加载完成");
         };
 
         SystemEvents.UserPreferenceChanged += (_, _) =>
@@ -54,6 +71,7 @@ public partial class MainWindowViewModel : ObservableObject
     [RelayCommand]
     private static void CloseThis()
     {
+        WritingLog("主窗口正常退出");
         MainClass.Close();
     }
 }

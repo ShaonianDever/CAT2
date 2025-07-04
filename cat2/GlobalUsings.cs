@@ -9,3 +9,4 @@ global using CommunityToolkit.Mvvm.ComponentModel;
 global using CommunityToolkit.Mvvm.Input;
 global using Wpf.Ui.Controls;
 global using static CAT2.Model;
+global using static ChmlFrp.SDK.Paths;

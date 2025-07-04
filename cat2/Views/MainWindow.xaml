@@ -94,6 +94,7 @@
             <ui:NavigationView.FooterMenuItems>
                 <ui:NavigationViewItem
                     Content="设置"
+                    NavigationCacheMode="Enabled"
                     Icon="{ui:SymbolIcon Settings24}"
                     TargetPageType="{x:Type pages:SettingPage}" />
             </ui:NavigationView.FooterMenuItems>
