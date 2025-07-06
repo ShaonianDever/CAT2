@@ -36,7 +36,7 @@
                 Margin="0,0,0,10"
                 HorizontalAlignment="Center"
                 Content="{Binding Email,Mode=TwoWay}"
-                Foreground="Gray" />
+                Foreground="{ui:ThemeResource TextFillColorDisabledBrush}" />
 
             <ui:TextBlock>
                 <Run
