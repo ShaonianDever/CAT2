@@ -20,17 +20,35 @@
 
         <ui:CardExpander>
             <ui:CardExpander.Header>
-                <Label
-                    Margin="5"
-                    Content="缓存清除" />
+                <Grid>
+                    <StackPanel
+                        Orientation="Horizontal">
+                        <ui:SymbolIcon
+                            FontSize="25"
+                            Margin="10,0,10,0"
+                            Symbol="DocumentTextClock24" />
+                        <TextBlock>
+                            <Run
+                                Text="隧道日志记录" />
+                            <LineBreak />
+                            <Run
+                                FontSize="14"
+                                Text="查看日志记录或清除它。"
+                                Foreground="{ui:ThemeResource TextFillColorDisabledBrush}" />
+                        </TextBlock>
+                    </StackPanel>
+
+                    <Button
+                        Margin="0,0,10,0"
+                        HorizontalAlignment="Right"
+                        Command="{Binding OpenDataPathCommand}"
+                        Content="打开文件夹" />
+                </Grid>
             </ui:CardExpander.Header>
 
-            <StackPanel
-                Orientation="Horizontal">
-                <Button
-                    Content="清除隧道日志缓存"
-                    Command="{Binding ClearCacheCommand}" />
-            </StackPanel>
+            <Button
+                Content="清除隧道日志缓存"
+                Command="{Binding ClearCacheCommand}" />
         </ui:CardExpander>
 
         <Label
@@ -47,7 +65,7 @@
 
                         <ui:ImageIcon
                             Height="30"
-                            Margin="0,0,10,0"
+                            Margin="10,0,10,0"
                             Source="pack://application:,,,/logo.ico" />
 
                         <ui:TextBlock

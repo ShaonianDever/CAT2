@@ -10,6 +10,16 @@ public partial class SettingPageViewModel : ObservableObject
     [ObservableProperty] private string _version = Model.Version;
 
     [RelayCommand]
+    private void OpenDataPath()
+    {
+        Process.Start(new ProcessStartInfo
+        {
+            FileName = DataPath,
+            UseShellExecute = true
+        });
+    }
+
+    [RelayCommand]
     private void ClearCache()
     {
         foreach (var cachefile in Directory.GetFiles(DataPath, "*.log"))

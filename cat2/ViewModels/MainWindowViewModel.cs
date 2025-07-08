@@ -1,4 +1,7 @@
-﻿using Microsoft.Win32;
+﻿using System.Linq;
+using System.Runtime.InteropServices;
+using System.Threading;
+using Microsoft.Win32;
 using Wpf.Ui.Appearance;
 
 namespace CAT2.ViewModels;
@@ -27,6 +30,24 @@ public partial class MainWindowViewModel : ObservableObject
 
         MainClass.Loaded += async (_, _) =>
         {
+            new Mutex(
+                true,
+                "CAT2_GlobalMutex",
+                out var createdNew);
+
+            if (!createdNew)
+            {
+                var otherInstance = Process.GetProcessesByName(Model.AssemblyName).FirstOrDefault();
+                if (otherInstance != null)
+                {
+                    otherInstance.WaitForInputIdle();
+                    SetForegroundWindow(otherInstance.MainWindowHandle);
+                }
+
+                Application.Current.Shutdown();
+                return;
+            }
+
             Init("CAT2");
 
             if (ApplicationThemeManager.GetSystemTheme() == SystemTheme.Dark) ThemesChanged();
@@ -53,6 +74,9 @@ public partial class MainWindowViewModel : ObservableObject
             IsDarkTheme = !theme;
         };
     }
+
+    [DllImport("user32.dll")]
+    private static extern bool SetForegroundWindow(IntPtr hWnd);
 
     [RelayCommand]
     private void ThemesChanged()

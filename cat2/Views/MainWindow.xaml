@@ -70,8 +70,9 @@
             <ui:NavigationView.MenuItems>
                 <ui:NavigationViewItem
                     Content="登录"
+                    FontSize="16"
                     x:Name="LoginItem"
-                    Icon="{ui:SymbolIcon NoteAdd24}"
+                    Icon="{ui:SymbolIcon NoteAdd48}"
                     TargetPageType="{x:Type pages:LoginPage}" />
 
                 <ui:NavigationViewItem
@@ -79,7 +80,7 @@
                     x:Name="UserItem"
                     Visibility="Collapsed"
                     NavigationCacheMode="Enabled"
-                    Icon="{ui:SymbolIcon ContactCard24}"
+                    Icon="{ui:SymbolIcon ContactCard48}"
                     TargetPageType="{x:Type pages:UserinfoPage}" />
 
                 <ui:NavigationViewItem
@@ -87,7 +88,7 @@
                     x:Name="TunnelItem"
                     Visibility="Collapsed"
                     NavigationCacheMode="Enabled"
-                    Icon="{ui:SymbolIcon Channel24}"
+                    Icon="{ui:SymbolIcon Channel48}"
                     TargetPageType="{x:Type pages:TunnelPage}" />
             </ui:NavigationView.MenuItems>
 
@@ -95,7 +96,7 @@
                 <ui:NavigationViewItem
                     Content="设置"
                     NavigationCacheMode="Enabled"
-                    Icon="{ui:SymbolIcon Settings24}"
+                    Icon="{ui:SymbolIcon Settings48}"
                     TargetPageType="{x:Type pages:SettingPage}" />
             </ui:NavigationView.FooterMenuItems>
         </ui:NavigationView>
