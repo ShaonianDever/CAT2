@@ -20,7 +20,7 @@
                             HorizontalAlignment="Left"
                             Orientation="Horizontal">
                             <ui:TextBlock
-                                FontSize="20"
+                                FontSize="18"
                                 FontWeight="Bold"
                                 ToolTip="{Binding Id}"
                                 Text="{Binding Name}" />
@@ -56,16 +56,16 @@
                             Placement="Top"
                             IsOpen="{Binding IsFlyoutOpen, Mode=TwoWay}">
                             <StackPanel
-                                Orientation="Horizontal">
+                                Orientation="Vertical">
                                 <TextBlock
                                     HorizontalAlignment="Left"
-                                    Text="你下好删除的决心了吗？"
+                                    Text="你有多少把握删除呢？"
                                     TextWrapping="WrapWithOverflow" />
 
                                 <ui:Button
                                     ToolTip="没事再来一瓶🤓"
                                     Command="{Binding DeleteTunnelCommand}"
-                                    Margin="0,10,10,0"
+                                    Margin="0,10,0,0"
                                     Content="确定" />
                             </StackPanel>
                         </ui:Flyout>

@@ -68,8 +68,7 @@
                             Margin="10,0,10,0"
                             Source="pack://application:,,,/logo.ico" />
 
-                        <ui:TextBlock
-                            Margin="10,0,0,0">
+                        <ui:TextBlock>
                             <Run
                                 Text="{Binding AssemblyName}" />
                             <LineBreak />
